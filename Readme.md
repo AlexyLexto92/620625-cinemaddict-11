@@ -1,7 +1,7 @@
 # Личный проект «Киноман» [![Build status][travis-image]][travis-url]
 
 * Студент: [Алексей Толстоног](https://up.htmlacademy.ru/ecmascript/11/user/620625).
-* Наставник: `Неизвестно`.
+
 
 ---
 
