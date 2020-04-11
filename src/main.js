@@ -9,8 +9,8 @@ import {getSiteTopComenter} from './components/topComment';
 import {getSiteTopRated} from './components/topRated.js';
 import {getSiteFooterStatistic} from './components/footerStatistic.js';
 import {getLoadMoreButton} from './components/buttonMore.js';
-import {dataFilms, filtersData} from './components/data.js';
 import {removeElement} from './components/utils.js';
+import {dataFilms, filtersData} from './components/mock.js';
 const FILM = {
   START: 0,
   COUNT: 5,
@@ -25,6 +25,7 @@ const COMMENT = {
   START: 0,
   END: 2
 };
+let startFilmCount = FILM.START;
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -70,7 +71,7 @@ let getTopCategoryFilms = (data, Topcategory) => {
   let end = 0;
   if (Topcategory === `rating`) {
     let ratingArr = data.slice().sort((a, b) => {
-      return b.rating - a.rating;
+      return b.film_info.total_rating - a.film_info.total_rating;
     });
     TopCategoryFilmsContainer = filmListContainerRated;
     start = RATED.START;
@@ -78,7 +79,7 @@ let getTopCategoryFilms = (data, Topcategory) => {
     renderFilms(ratingArr, TopCategoryFilmsContainer, getSiteFilmCard, `beforeend`, start, end);
   } else {
     let commentArr = data.slice().sort((a, b) => {
-      return b.commentsCount - a.commentsCount;
+      return b.comments.length - a.comments.length;
     });
     TopCategoryFilmsContainer = filmListContainerComment;
     start = COMMENT.START;
@@ -97,11 +98,10 @@ render(footerStatistic, getSiteFooterStatistic(), `beforeend`);
 filmListContainerRated = ratedFilm.querySelector(`.films-list__container`);
 let footer = document.querySelector(`.footer`);
 siteMainElement.addEventListener(`click`, (evt) => {
-
   let target = evt.target;
   if (target.className === `film-card__poster` || target.className === `film-card__comments` || target.className === `film-card__title`) {
     let filmId = target.dataset.id;
-    let data = dataFilms.find((element) => element.id === Number(filmId));
+    let data = dataFilms.find((element) => element.id === filmId);
     render(footer, getFilmDetails(data), `afterend`);
 
     let deatilsContainer = document.querySelector(`.film-details`);
@@ -115,11 +115,10 @@ siteMainElement.addEventListener(`click`, (evt) => {
 const loadButton = document.querySelector(`.films-list__show-more`);
 let filmListContainerTop = document.querySelector(`.films-list__container--top`);
 const addFilms = () => {
-
-  FILM.START = FILM.START + FILM.COUNT;
-  FILM.END = FILM.START + FILM.COUNT;
+  startFilmCount = startFilmCount + FILM.COUNT;
+  let endFilmCount = startFilmCount + FILM.COUNT;
   let sliceFilms = dataFilms.slice();
-  renderFilms(sliceFilms, filmListContainer, getSiteFilmCard, `beforeend`, FILM.START, FILM.END);
+  renderFilms(sliceFilms, filmListContainer, getSiteFilmCard, `beforeend`, startFilmCount, endFilmCount);
   const filmsCards = filmListContainerTop.querySelectorAll(`.film-card__poster`);
   const filmLength = Array.from(filmsCards).length;
   if (filmLength >= dataFilms.length - 1) {

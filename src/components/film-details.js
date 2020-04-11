@@ -1,4 +1,7 @@
-export const getFilmDetails = ({image, name, description, rating, year, duration, comments, commentsCount, author, writers, actors, country, genres}) => {
+export const getFilmDetails = ({id, film_info: filmInfo, user_details: userDetails, comments}) => {
+  let {title, alternative_title: altTitle, total_rating: totalRating, poster, age_rating: ageRating, director, writers, actors, release: {date, release_country: releaseCounry}, runtime, genre, description} = filmInfo;
+  let {watchlist, already_watched: alreadyWatched, favorite} = userDetails;
+  let months = [`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`, `October`, `November`, `December`];
   return (
     `<section class="film-details">
 <form class="film-details__inner" action="" method="get">
@@ -6,60 +9,60 @@ export const getFilmDetails = ({image, name, description, rating, year, duration
         <div class="film-details__close">
             <button class="film-details__close-btn" type="button">close</button>
         </div>
-        <div class="film-details__info-wrap">
+        <div class="film-details__info-wrap" data-id="${id}">
             <div class="film-details__poster">
-                <img class="film-details__poster-img" src="./images/posters/${image}" alt="">
+                <img class="film-details__poster-img" src="${poster}" alt="">
 
-                <p class="film-details__age">18+</p>
+                <p class="film-details__age">${ageRating}+</p>
             </div>
 
             <div class="film-details__info">
                 <div class="film-details__info-head">
                     <div class="film-details__title-wrap">
-                        <h3 class="film-details__title">${name}</h3>
+                        <h3 class="film-details__title">${title}</h3>
                         <p class="film-details__title-original">
-                            Original: ${name}
+                            Original: ${altTitle}
                         </p>
                     </div>
 
                     <div class="film-details__rating">
-                        <p class="film-details__total-rating">${rating}</p>
+                        <p class="film-details__total-rating">${totalRating}</p>
                     </div>
                 </div>
 
                 <table class="film-details__table">
                     <tbody><tr class="film-details__row">
                         <td class="film-details__term">Director</td>
-                        <td class="film-details__cell">${author}</td>
+                        <td class="film-details__cell">${director}</td>
                     </tr>
                     <tr class="film-details__row">
                         <td class="film-details__term">Writers</td>
-                        <td class="film-details__cell">
-                           ${writers}
-                        </td>
+                       ${writers.length ? `<td class="film-details__cell">
+      ${writers}
+    </td>` : ``}
                     </tr>
                     <tr class="film-details__row">
                         <td class="film-details__term">Actors</td>
-                        <td class="film-details__cell">
-                            ${actors}
-                        </td>
+                       ${actors.length ? `<td class="film-details__cell">
+                          ${actors}
+                        </td>` : ``}
                     </tr>
                     <tr class="film-details__row">
                         <td class="film-details__term">Release Date</td>
-                        <td class="film-details__cell">${year}</td>
+                        <td class="film-details__cell">${new Date(date).getDate()} ${months[new Date(date).getMonth()]} ${new Date(date).getFullYear()}</td>
                     </tr>
                     <tr class="film-details__row">
                         <td class="film-details__term">Runtime</td>
-                        <td class="film-details__cell">${duration}</td>
+                        <td class="film-details__cell">${runtime}</td>
                     </tr>
                     <tr class="film-details__row">
                         <td class="film-details__term">Country</td>
-                        <td class="film-details__cell">${country}</td>
+                        <td class="film-details__cell">${releaseCounry}</td>
                     </tr>
                     <tr class="film-details__row">
                         <td class="film-details__term">Genres</td>
                         <td class="film-details__cell">
-                          ${genres.map((it) => `<span class="film-details__genre">${it}</span>`).join(``)}; 
+                          ${genre ? genre.map((it) => `<span class="film-details__genre">${it}</span>`).join(``) : ``}
 
                         </td>
                     </tr>
@@ -72,13 +75,13 @@ export const getFilmDetails = ({image, name, description, rating, year, duration
         </div>
 
         <section class="film-details__controls">
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+            <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${watchlist ? `checked='cheked'` : ``}>
             <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-    <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+    <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${alreadyWatched ? `checked='cheked'` : ``}>
     <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-    <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+    <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${favorite ? `checked='cheked'` : ``}>
     <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
   </section>
 </div>
@@ -86,18 +89,18 @@ export const getFilmDetails = ({image, name, description, rating, year, duration
 <div class="form-details__bottom-container">
   <section class="film-details__comments-wrap">
     <h3 class="film-details__comments-title">
-      ${commentsCount < 2 ? `Comments` : `Comment`} <span class="film-details__comments-count">${commentsCount}</span>
+      ${comments.length < 2 ? `Comment` : `Comments`} <span class="film-details__comments-count">${comments.length}</span>
     </h3>
 
     <ul class="film-details__comments-list">
-    ${comments.map((it)=>
+    ${comments ? comments.map((it) =>
       `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
-        <img src="./images/emoji/${it.image}" width="55" height="55" alt="emoji">
+        <img src="./images/emoji/${it.emotion}" width="55" height="55" alt="emoji">
       </span>
       <div>
         <p class="film-details__comment-text">
-          ${it.text}
+          ${it.comment}
         </p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${it.author}</span>
@@ -105,7 +108,7 @@ export const getFilmDetails = ({image, name, description, rating, year, duration
           <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>
-    </li>`).join(``)}
+    </li>`).join(``) : ``}
     </ul>
 
     <div class="film-details__new-comment">
