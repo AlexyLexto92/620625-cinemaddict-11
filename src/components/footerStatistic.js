@@ -1,7 +1,7 @@
-export const getSiteFooterStatistic = () => {
+export const getSiteFooterStatistic = (count) => {
   return (
     `<section class="footer__statistics">
-    <p>130 291 movies inside</p>
+    <p>${count.length} movies inside</p>
   </section>`
   );
 };
