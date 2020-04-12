@@ -55,7 +55,7 @@ let renderFilms = (data, container, card, position, start, end) => {
   }
 };
 
-let sortedArray = [];
+let sortedArray = dataFilms.slice();
 let sortContainer = document.querySelector(`.sort`);
 sortContainer.addEventListener(`click`, (evt) => {
   evt.preventDefault();
