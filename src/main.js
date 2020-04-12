@@ -54,6 +54,44 @@ let renderFilms = (data, container, card, position, start, end) => {
     render(container, card(film), position);
   }
 };
+
+let sortedArray = [];
+let sortContainer = document.querySelector(`.sort`);
+sortContainer.addEventListener(`click`, (evt) => {
+  evt.preventDefault();
+
+  if (evt.target.tagName !== `A`) {
+    return;
+  }
+
+  let target = evt.target;
+  let sorts = document.querySelectorAll(`.sort__button`);
+  for (const sort of sorts) {
+    sort.className = `sort__button`;
+  }
+  target.classList.add(`sort__button--active`);
+
+  filmListContainer.innerHTML = ``;
+  switch (evt.target.dataset.sort) {
+    case `date-up`:
+      sortedArray = dataFilms.slice().sort((a, b) => {
+        a.film_info.release.date = new Date(a.film_info.release.date).getTime();
+        b.film_info.release.date = new Date(b.film_info.release.date).getTime();
+        return b.film_info.release.date - a.film_info.release.date;
+      });
+
+      renderFilms(sortedArray, filmListContainer, getSiteFilmCard, `beforeend`, FILM.START, FILM.END);
+      break;
+    case `rating-up`:
+      sortedArray = dataFilms.slice().sort((a, b) => b.film_info.total_rating - a.film_info.total_rating);
+      renderFilms(sortedArray, filmListContainer, getSiteFilmCard, `beforeend`, FILM.START, FILM.END);
+      break;
+    case `default`:
+      sortedArray = dataFilms.slice();
+      renderFilms(sortedArray, filmListContainer, getSiteFilmCard, `beforeend`, FILM.START, FILM.END);
+      break;
+  }
+});
 renderFilms(dataFilms, filmListContainer, getSiteFilmCard, `beforeend`, FILM.START, FILM.END);
 
 
@@ -117,11 +155,11 @@ let filmListContainerTop = document.querySelector(`.films-list__container--top`)
 const addFilms = () => {
   startFilmCount = startFilmCount + FILM.COUNT;
   let endFilmCount = startFilmCount + FILM.COUNT;
-  let sliceFilms = dataFilms.slice();
+  let sliceFilms = sortedArray.slice();
   renderFilms(sliceFilms, filmListContainer, getSiteFilmCard, `beforeend`, startFilmCount, endFilmCount);
   const filmsCards = filmListContainerTop.querySelectorAll(`.film-card__poster`);
   const filmLength = Array.from(filmsCards).length;
-  if (filmLength >= dataFilms.length - 1) {
+  if (filmLength >= sliceFilms.length - 1) {
     removeElement(loadButton);
   }
 };
