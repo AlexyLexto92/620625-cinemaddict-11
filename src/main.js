@@ -132,7 +132,7 @@ getTopCategoryFilms(dataFilms, `rating`);
 getTopCategoryFilms(dataFilms);
 
 const footerStatistic = document.querySelector(`.footer__statistics`);
-render(footerStatistic, getSiteFooterStatistic(), `beforeend`);
+render(footerStatistic, getSiteFooterStatistic(dataFilms), `beforeend`);
 filmListContainerRated = ratedFilm.querySelector(`.films-list__container`);
 let footer = document.querySelector(`.footer`);
 siteMainElement.addEventListener(`click`, (evt) => {
