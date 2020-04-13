@@ -38,6 +38,7 @@ const siteMainElement = document.querySelector(`.main`);
 render(siteHeaderElement, createSiteProfile(), `beforeend`);
 render(siteMainElement, createSiteMenu(), `beforeend`);
 let navigationContainer = document.querySelector(`.main-navigation__items`);
+
 for (let filter of filtersData) {
   render(navigationContainer, getFilter(filter), `beforeend`);
 }
@@ -54,12 +55,49 @@ let renderFilms = (data, container, card, position, start, end) => {
     render(container, card(film), position);
   }
 };
+let filters = navigationContainer.querySelectorAll(`.main-navigation__item`);
+filters[0].classList.add(`main-navigation__item--active`);
+let filteredArray = 0;
+navigationContainer.addEventListener(`click`, (evt) => {
+  if (evt.target.tagName !== `A`) {
+    return;
+  }
+  let target = evt.target;
 
-let sortedArray = dataFilms.slice();
+
+  for (const filter of filters) {
+    filter.className = `main-navigation__item`;
+  }
+  target.classList.add(`main-navigation__item--active`);
+  filmListContainer.innerHTML = ``;
+
+  switch (evt.target.dataset.filter) {
+    case `All`:
+      filteredArray = dataFilms.slice();
+      renderFilms(filteredArray, filmListContainer, getSiteFilmCard, `beforeend`, FILM.START, FILM.END);
+      break;
+    case `Watchlist`:
+      filteredArray = dataFilms.slice().filter((film) => film.user_details.watchlist === true);
+
+      renderFilms(filteredArray, filmListContainer, getSiteFilmCard, `beforeend`, FILM.START, FILM.END);
+      break;
+    case `History`:
+      filteredArray = dataFilms.slice().filter((film) => film.user_details.already_watched === true);
+      renderFilms(filteredArray, filmListContainer, getSiteFilmCard, `beforeend`, FILM.START, FILM.END);
+      break;
+    case `Favorites`:
+      filteredArray = dataFilms.slice().filter((film) => film.user_details.favorite === true);
+      renderFilms(filteredArray, filmListContainer, getSiteFilmCard, `beforeend`, FILM.START, FILM.END);
+      break;
+
+  }
+});
+let isFilter = filteredArray ? filteredArray : dataFilms;
+let sortedArray = isFilter.slice();
 let sortContainer = document.querySelector(`.sort`);
 sortContainer.addEventListener(`click`, (evt) => {
   evt.preventDefault();
-
+  isFilter = filteredArray ? filteredArray : dataFilms;
   if (evt.target.tagName !== `A`) {
     return;
   }
@@ -74,7 +112,7 @@ sortContainer.addEventListener(`click`, (evt) => {
   filmListContainer.innerHTML = ``;
   switch (evt.target.dataset.sort) {
     case `date-up`:
-      sortedArray = dataFilms.slice().sort((a, b) => {
+      sortedArray = isFilter.slice().sort((a, b) => {
         a.film_info.release.date = new Date(a.film_info.release.date).getTime();
         b.film_info.release.date = new Date(b.film_info.release.date).getTime();
         return b.film_info.release.date - a.film_info.release.date;
@@ -83,11 +121,11 @@ sortContainer.addEventListener(`click`, (evt) => {
       renderFilms(sortedArray, filmListContainer, getSiteFilmCard, `beforeend`, FILM.START, FILM.END);
       break;
     case `rating-up`:
-      sortedArray = dataFilms.slice().sort((a, b) => b.film_info.total_rating - a.film_info.total_rating);
+      sortedArray = isFilter.slice().sort((a, b) => b.film_info.total_rating - a.film_info.total_rating);
       renderFilms(sortedArray, filmListContainer, getSiteFilmCard, `beforeend`, FILM.START, FILM.END);
       break;
     case `default`:
-      sortedArray = dataFilms.slice();
+      sortedArray = isFilter.slice();
       renderFilms(sortedArray, filmListContainer, getSiteFilmCard, `beforeend`, FILM.START, FILM.END);
       break;
   }
@@ -153,9 +191,10 @@ siteMainElement.addEventListener(`click`, (evt) => {
 const loadButton = document.querySelector(`.films-list__show-more`);
 let filmListContainerTop = document.querySelector(`.films-list__container--top`);
 const addFilms = () => {
+  isFilter = filteredArray ? filteredArray : sortedArray;
   startFilmCount = startFilmCount + FILM.COUNT;
   let endFilmCount = startFilmCount + FILM.COUNT;
-  let sliceFilms = sortedArray.slice();
+  let sliceFilms = isFilter.slice();
   renderFilms(sliceFilms, filmListContainer, getSiteFilmCard, `beforeend`, startFilmCount, endFilmCount);
   const filmsCards = filmListContainerTop.querySelectorAll(`.film-card__poster`);
   const filmLength = Array.from(filmsCards).length;
