@@ -1,3 +1,4 @@
+import {createElement} from './utils.js';
 export const getSiteFilmCard = ({id, film_info: filmInfo, user_details: userDetails, comments}) => {
   let {title, total_rating: totalRating, poster, release: {date}, runtime, genre, description} = filmInfo;
   let {watchlist, already_watched: alreadyWatched, favorite} = userDetails;
@@ -21,3 +22,21 @@ export const getSiteFilmCard = ({id, film_info: filmInfo, user_details: userDeta
         </article>`
   );
 };
+export default class FilmCard {
+  constructor(card) {
+    this._card = card;
+    this.element = null;
+  }
+  getTemplate() {
+    return getSiteFilmCard(this._card);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    } return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}

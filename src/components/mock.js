@@ -55,3 +55,174 @@ fetch('https://htmlacademy-es-9.appspot.com/cinemaddict//comments/19',{
   .then((data) => {
     console.log(data);
   });
+
+  /*
+render(siteHeaderElement, createSiteProfile(), `beforeend`);
+render(siteMainElement, createSiteMenu(), `beforeend`);
+let navigationContainer = document.querySelector(`.main-navigation__items`);
+
+for (let filter of filtersData) {
+  render(navigationContainer, getFilter(filter), `beforeend`);
+}
+render(siteMainElement, createSiteSort(), `beforeend`);
+render(siteMainElement, getSiteFilmList(), `beforeend`);
+
+const films = siteMainElement.querySelector(`.films`);
+const filmList = siteMainElement.querySelector(`.films-list`);
+const filmListContainer = siteMainElement.querySelector(`.films-list__container`);
+let renderFilms = (data, container, card, position, start, end) => {
+
+  let sliceFilms = data.slice(start, end);
+  for (let film of sliceFilms) {
+    render(container, card(film), position);
+  }
+};
+let filters = navigationContainer.querySelectorAll(`.main-navigation__item`);
+filters[0].classList.add(`main-navigation__item--active`);
+let filteredArray = 0;
+navigationContainer.addEventListener(`click`, (evt) => {
+  if (evt.target.tagName !== `A`) {
+    return;
+  }
+  let target = evt.target;
+
+
+  for (const filter of filters) {
+    filter.className = `main-navigation__item`;
+  }
+  target.classList.add(`main-navigation__item--active`);
+  filmListContainer.innerHTML = ``;
+
+  switch (evt.target.dataset.filter) {
+    case `All`:
+      filteredArray = dataFilms.slice();
+      renderFilms(filteredArray, filmListContainer, getSiteFilmCard, `beforeend`, FILM.START, FILM.END);
+      break;
+    case `Watchlist`:
+      filteredArray = dataFilms.slice().filter((film) => film.user_details.watchlist === true);
+
+      renderFilms(filteredArray, filmListContainer, getSiteFilmCard, `beforeend`, FILM.START, FILM.END);
+      break;
+    case `History`:
+      filteredArray = dataFilms.slice().filter((film) => film.user_details.already_watched === true);
+      renderFilms(filteredArray, filmListContainer, getSiteFilmCard, `beforeend`, FILM.START, FILM.END);
+      break;
+    case `Favorites`:
+      filteredArray = dataFilms.slice().filter((film) => film.user_details.favorite === true);
+      renderFilms(filteredArray, filmListContainer, getSiteFilmCard, `beforeend`, FILM.START, FILM.END);
+      break;
+
+  }
+});
+let isFilter = filteredArray ? filteredArray : dataFilms;
+let sortedArray = isFilter.slice();
+let sortContainer = document.querySelector(`.sort`);
+sortContainer.addEventListener(`click`, (evt) => {
+  evt.preventDefault();
+  isFilter = filteredArray ? filteredArray : dataFilms;
+  if (evt.target.tagName !== `A`) {
+    return;
+  }
+
+  let target = evt.target;
+  let sorts = document.querySelectorAll(`.sort__button`);
+  for (const sort of sorts) {
+    sort.className = `sort__button`;
+  }
+  target.classList.add(`sort__button--active`);
+
+  filmListContainer.innerHTML = ``;
+  switch (evt.target.dataset.sort) {
+    case `date-up`:
+      sortedArray = isFilter.slice().sort((a, b) => {
+        a.film_info.release.date = new Date(a.film_info.release.date).getTime();
+        b.film_info.release.date = new Date(b.film_info.release.date).getTime();
+        return b.film_info.release.date - a.film_info.release.date;
+      });
+
+      renderFilms(sortedArray, filmListContainer, getSiteFilmCard, `beforeend`, FILM.START, FILM.END);
+      break;
+    case `rating-up`:
+      sortedArray = isFilter.slice().sort((a, b) => b.film_info.total_rating - a.film_info.total_rating);
+      renderFilms(sortedArray, filmListContainer, getSiteFilmCard, `beforeend`, FILM.START, FILM.END);
+      break;
+    case `default`:
+      sortedArray = isFilter.slice();
+      renderFilms(sortedArray, filmListContainer, getSiteFilmCard, `beforeend`, FILM.START, FILM.END);
+      break;
+  }
+});
+renderFilms(dataFilms, filmListContainer, getSiteFilmCard, `beforeend`, FILM.START, FILM.END);
+
+
+render(filmList, getLoadMoreButton(), `beforeend`);
+render(films, getSiteTopRated(), `beforeend`);
+render(films, getSiteTopComenter(), `beforeend`);
+const ratedFilm = films.querySelector(`.films-list--rated`);
+const commentFilm = films.querySelector(`.films-list--comment`);
+let filmListContainerRated = ratedFilm.querySelector(`.films-list__container`);
+const filmListContainerComment = commentFilm.querySelector(`.films-list__container`);
+
+let getTopCategoryFilms = (data, Topcategory) => {
+  let TopCategoryFilmsContainer = ``;
+  let start = 0;
+  let end = 0;
+  if (Topcategory === `rating`) {
+    let ratingArr = data.slice().sort((a, b) => {
+      return b.film_info.total_rating - a.film_info.total_rating;
+    });
+    TopCategoryFilmsContainer = filmListContainerRated;
+    start = RATED.START;
+    end = RATED.END;
+    renderFilms(ratingArr, TopCategoryFilmsContainer, getSiteFilmCard, `beforeend`, start, end);
+  } else {
+    let commentArr = data.slice().sort((a, b) => {
+      return b.comments.length - a.comments.length;
+    });
+    TopCategoryFilmsContainer = filmListContainerComment;
+    start = COMMENT.START;
+    end = COMMENT.END;
+    renderFilms(commentArr, TopCategoryFilmsContainer, getSiteFilmCard, `beforeend`, start, end);
+  }
+
+
+};
+
+getTopCategoryFilms(dataFilms, `rating`);
+getTopCategoryFilms(dataFilms);
+
+const footerStatistic = document.querySelector(`.footer__statistics`);
+render(footerStatistic, getSiteFooterStatistic(dataFilms), `beforeend`);
+filmListContainerRated = ratedFilm.querySelector(`.films-list__container`);
+let footer = document.querySelector(`.footer`);
+siteMainElement.addEventListener(`click`, (evt) => {
+  let target = evt.target;
+  if (target.className === `film-card__poster` || target.className === `film-card__comments` || target.className === `film-card__title`) {
+    let filmId = target.dataset.id;
+    let data = dataFilms.find((element) => element.id === filmId);
+    render(footer, getFilmDetails(data), `afterend`);
+
+    let deatilsContainer = document.querySelector(`.film-details`);
+    let buttonClose = document.querySelector(`.film-details__close-btn`);
+    buttonClose.addEventListener(`click`, () => {
+      removeElement(deatilsContainer);
+    });
+  }
+});
+
+const loadButton = document.querySelector(`.films-list__show-more`);
+let filmListContainerTop = document.querySelector(`.films-list__container--top`);
+const addFilms = () => {
+  isFilter = filteredArray ? filteredArray : sortedArray;
+  startFilmCount = startFilmCount + FILM.COUNT;
+  let endFilmCount = startFilmCount + FILM.COUNT;
+  let sliceFilms = isFilter.slice();
+  renderFilms(sliceFilms, filmListContainer, getSiteFilmCard, `beforeend`, startFilmCount, endFilmCount);
+  const filmsCards = filmListContainerTop.querySelectorAll(`.film-card__poster`);
+  const filmLength = Array.from(filmsCards).length;
+  if (filmLength >= sliceFilms.length - 1) {
+    removeElement(loadButton);
+  }
+};
+loadButton.addEventListener(`click`, addFilms);
+ */
