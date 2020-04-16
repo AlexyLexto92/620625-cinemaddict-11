@@ -1,3 +1,4 @@
+import {createElement} from './utils.js';
 export const createSiteSort = () => {
   return (
     `<ul class="sort">
@@ -7,3 +8,21 @@ export const createSiteSort = () => {
   </ul>`
   );
 };
+export default class Sort {
+  constructor() {
+    this.element = null;
+  }
+  getTemplate() {
+    return createSiteSort();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+  removeElement() {
+    this._element = null;
+  }
+}
