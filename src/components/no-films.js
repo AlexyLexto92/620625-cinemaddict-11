@@ -1,22 +1,19 @@
 import {createElement} from './utils.js';
-export const createSiteMenu = () => {
+
+const createNoFilmsTemplate = () => {
   return (
-    `<nav class="main-navigation">
-    <div class="main-navigation__items">
-     
-    </div>
-    <a href="#stats" class="main-navigation__additional">Stats</a>
-  </nav>`
+    `<h2 class="films-list__title">There are no movies in our database</h2>`
   );
 };
 
 
-export default class Menu {
+export default class NoFilms {
   constructor() {
-    this.element = null;
+    this._element = null;
   }
+
   getTemplate() {
-    return createSiteMenu();
+    return createNoFilmsTemplate();
   }
 
   getElement() {
@@ -25,6 +22,7 @@ export default class Menu {
     }
     return this._element;
   }
+
   removeElement() {
     this._element = null;
   }
