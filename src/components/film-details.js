@@ -155,5 +155,7 @@ export default class FilmCardDetail extends AbstractComponent {
   getTemplate() {
     return getFilmDetails(this._card);
   }
-
+  setOnCloseHendler(hendler) {
+    this.getElement().addEventListener(`click`, hendler);
+  }
 }
