@@ -1,4 +1,4 @@
-import {createElement} from './utils.js';
+import AbstractComponent from './abstract-component.js';
 export const getFilmDetails = ({id, film_info: filmInfo, user_details: userDetails, comments}) => {
   let {title, alternative_title: altTitle, total_rating: totalRating, poster, age_rating: ageRating, director, writers, actors, release: {date, release_country: releaseCounry}, runtime, genre, description} = filmInfo;
   let {watchlist, already_watched: alreadyWatched, favorite} = userDetails;
@@ -147,22 +147,13 @@ export const getFilmDetails = ({id, film_info: filmInfo, user_details: userDetai
 </section>`
   );
 };
-export default class FilmCardDetail {
+export default class FilmCardDetail extends AbstractComponent {
   constructor(card) {
+    super();
     this._card = card;
-    this.element = null;
   }
   getTemplate() {
     return getFilmDetails(this._card);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
-  }
 }

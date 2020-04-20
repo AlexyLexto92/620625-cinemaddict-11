@@ -1,25 +1,16 @@
-import {createElement} from './utils.js';
+import AbstractComponent from './abstract-component.js';
 export const getFilter = ({name, count}) => {
   return (
     `<a href="#${name}" class="main-navigation__item" data-filter = ${name}>${name}${name === `All movies` ? `` : `<span class="main-navigation__item-count">${count}</span>`}</a ></a > `
   );
 };
-export default class Filter {
+export default class Filter extends AbstractComponent {
   constructor(filter) {
+    super();
     this._filter = filter;
-    this.element = null;
   }
   getTemplate() {
     return getFilter(this._filter);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
-  }
 }
