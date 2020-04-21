@@ -1,4 +1,4 @@
-import {createElement} from './utils.js';
+import AbstractComponent from './abstract-component.js';
 export const getSiteFooterStatistic = (count) => {
   return (
     `<section class="footer__statistics">
@@ -6,22 +6,13 @@ export const getSiteFooterStatistic = (count) => {
   </section>`
   );
 };
-export default class FoterStatistic {
+export default class FoterStatistic extends AbstractComponent {
   constructor(count) {
+    super();
     this._count = count;
-    this.element = null;
+
   }
   getTemplate() {
     return getSiteFooterStatistic(this._count);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
   }
 }

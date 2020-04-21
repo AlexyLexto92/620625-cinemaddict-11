@@ -1,4 +1,4 @@
-import {createElement} from './utils.js';
+import AbstractComponent from './abstract-component.js';
 export const getSiteFilmCard = ({id, film_info: filmInfo, user_details: userDetails, comments}) => {
   let {title, total_rating: totalRating, poster, release: {date}, runtime, genre, description} = filmInfo;
   let {watchlist, already_watched: alreadyWatched, favorite} = userDetails;
@@ -22,22 +22,15 @@ export const getSiteFilmCard = ({id, film_info: filmInfo, user_details: userDeta
         </article>`
   );
 };
-export default class FilmCard {
+export default class FilmCard extends AbstractComponent {
   constructor(card) {
+    super();
     this._card = card;
-    this.element = null;
   }
   getTemplate() {
     return getSiteFilmCard(this._card);
   }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-  removeElement() {
-    this._element = null;
+  setOnClickHendler(hendler) {
+    this.getElement().addEventListener(`click`, hendler);
   }
 }
