@@ -1,7 +1,6 @@
 import Profile from './components/profile.js';
 import Menu from './components/menu.js';
 import Filter from './components/filters.js';
-import Sort from './components/sort.js';
 import FilmList from './components/filmList.js';
 import FooterStatistic from './components/footerStatistic.js';
 import PageController from './controller/filmsController.js';
@@ -19,7 +18,7 @@ render(siteMainElement, menu, RenderPosition.AFTERBEGIN);
 filtersData.forEach((element) => {
   render(Topfilters, new Filter(element), RenderPosition.BEFOREEND);
 });
-render(siteMainElement, new Sort(), RenderPosition.BEFOREEND);
+
 
 const filmList = new FilmList();
 const pageController = new PageController(filmList);
