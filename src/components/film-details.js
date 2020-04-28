@@ -1,7 +1,7 @@
-import AbstractComponent from './abstract-component.js';
-export const getFilmDetails = ({id, film_info: filmInfo, user_details: userDetails, comments}) => {
-  let {title, alternative_title: altTitle, total_rating: totalRating, poster, age_rating: ageRating, director, writers, actors, release: {date, release_country: releaseCounry}, runtime, genre, description} = filmInfo;
-  let {watchlist, already_watched: alreadyWatched, favorite} = userDetails;
+import SmartAbstracktComponent from './smart-abstract-component.js';
+export const getFilmDetails = ({ id, film_info: filmInfo, user_details: userDetails, comments }) => {
+  let { title, alternative_title: altTitle, total_rating: totalRating, poster, age_rating: ageRating, director, writers, actors, release: { date, release_country: releaseCounry }, runtime, genre, description } = filmInfo;
+  let { watchlist, already_watched: alreadyWatched, favorite } = userDetails;
   let months = [`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`, `October`, `November`, `December`];
   return (
     `<section class="film-details">
@@ -97,7 +97,7 @@ export const getFilmDetails = ({id, film_info: filmInfo, user_details: userDetai
     ${comments ? comments.map((it) =>
       `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
-        <img src="./images/emoji/${it.emotion}" width="55" height="55" alt="emoji">
+        <img src="./images/emoji/${it.emotion}.png" width="55" height="55" alt="emoji">
       </span>
       <div>
         <p class="film-details__comment-text">
@@ -147,7 +147,7 @@ export const getFilmDetails = ({id, film_info: filmInfo, user_details: userDetai
 </section>`
   );
 };
-export default class FilmCardDetail extends AbstractComponent {
+export default class FilmCardDetail extends SmartAbstracktComponent {
   constructor(card) {
     super();
     this._card = card;
@@ -155,7 +155,22 @@ export default class FilmCardDetail extends AbstractComponent {
   getTemplate() {
     return getFilmDetails(this._card);
   }
+/*   rerender() {
+    super.rerender();
+  } */
   setOnCloseHendler(hendler) {
     this.getElement().addEventListener(`click`, hendler);
   }
+  setOnClickButtonWatchlist(hendler) {
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, hendler);
+  }
+  setOnClickButtonalreadyWatched(hendler) {
+    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, hendler);
+  }
+  setOnClickButtonWatchlistFavorite(hendler) {
+    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, hendler);
+  }
+/*   recoveryListeners() {
+
+  } */
 }
