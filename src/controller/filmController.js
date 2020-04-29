@@ -59,7 +59,7 @@ export default class FilmController extends AbstractComponent {
     });
 
 
- /*    this._filmDetail.setOnClickButtonWatchlist(() => {
+    this._filmDetail.setOnClickButtonWatchlist(() => {
       const oldData = Object.assign({}, film, {});
       oldData.user_details.watchlist = !oldData.user_details.watchlist;
       this._onDataChange(this, film, oldData);
@@ -74,7 +74,7 @@ export default class FilmController extends AbstractComponent {
       const oldData = Object.assign({}, film, {});
       oldData.user_details.favorite = !oldData.user_details.favorite;
       this._onDataChange(this, film, oldData);
-    }); */
+    });
 
     render(this._container, this._filmComponent, RenderPosition.BEFOREEND);
   }

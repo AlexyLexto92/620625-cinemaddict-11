@@ -70,7 +70,7 @@ export const getFilmDetails = ({ id, film_info: filmInfo, user_details: userDeta
                 </tbody></table>
 
                 <p class="film-details__film-description">
-                ${description}    
+                ${description}
                 </p>
             </div>
         </div>
@@ -151,13 +151,14 @@ export default class FilmCardDetail extends SmartAbstracktComponent {
   constructor(card) {
     super();
     this._card = card;
+
   }
   getTemplate() {
     return getFilmDetails(this._card);
   }
-/*   rerender() {
+  rerender() {
     super.rerender();
-  } */
+  }
   setOnCloseHendler(hendler) {
     this.getElement().addEventListener(`click`, hendler);
   }
@@ -170,7 +171,19 @@ export default class FilmCardDetail extends SmartAbstracktComponent {
   setOnClickButtonWatchlistFavorite(hendler) {
     this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, hendler);
   }
-/*   recoveryListeners() {
-
-  } */
+  recoveryListeners() {
+    this._subscribeEvents();
+  }
+  _subscribeEvents() {
+    const element = this.getElement();
+    element.querySelector.querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, () => {
+      this.rerender();
+    });
+    element.querySelector.querySelector(`.film-details__control-label--watched`).addEventListener(`click`, () => {
+      this.rerender();
+    });
+    element.querySelector.querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, () => {
+      this.rerender();
+    });
+  }
 }

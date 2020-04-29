@@ -155,7 +155,6 @@ export default class PageController {
     });
   }
   _onDataChange(filmController, oldData, newData) {
-debugger
     const index = this._films.findIndex((it) => it === oldData);
 
     if (index === -1) {
