@@ -79,6 +79,11 @@ export default class FilmController extends AbstractComponent {
       this._onDataChange(this, film, oldData);
     });
 
+    this._filmDetail.setOnClickEmoji(()=>{
+    const emojiContainer = this._filmDetail.querySelector(`.film-details__add-emoji-label`).
+      emojiContainer.innerHtml = `<img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">`;
+  });
+
     render(this._container, this._filmComponent, RenderPosition.BEFOREEND);
   }
   _onEscKeyDown(event) {

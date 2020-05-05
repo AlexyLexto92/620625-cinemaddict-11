@@ -60,8 +60,6 @@ export default class PageController {
     this._popupContainer = popupContainer;
     this._films = [];
     this._container = container;
-    this._filmComponent = new FilmCard();
-    this._filmDetail = new FilmCardDetail();
     this._ratedTopFillms = new TopRated();
     this._commentTopFilms = new TopComment();
     this._loadMoreButtonComponent = new LoadButton();
