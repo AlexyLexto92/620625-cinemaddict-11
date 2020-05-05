@@ -155,6 +155,7 @@ export default class FilmCardDetail extends SmartAbstracktComponent {
     this._watchlistHandeler = null;
     this._watchedHandler = null;
     this._isFavoriteHandler = null;
+
   }
   getTemplate() {
     return getFilmDetails(this._card);
@@ -162,12 +163,14 @@ export default class FilmCardDetail extends SmartAbstracktComponent {
   rerender() {
     super.rerender();
   }
+
   setOnCloseHendler(hendler) {
     this.getElement().addEventListener(`click`, hendler);
     this._closeHandler = hendler;
   }
   setOnClickButtonWatchlist(hendler) {
     this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, hendler);
+    this.rerender();
     this._watchlistHandeler = hendler;
   }
   setOnClickButtonalreadyWatched(hendler) {
@@ -178,8 +181,13 @@ export default class FilmCardDetail extends SmartAbstracktComponent {
     this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, hendler);
     this._isFavoriteHandler = hendler;
   }
+
+  _subscribeOnEvents() {
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, () => {
+      this.rerender();
+    });
+  }
   recoveryListeners() {
-    debugger
     this.setOnCloseHendler(this._closeHandler);
     this.setOnClickButtonWatchlist(this._watchlistHandeler);
     this.setOnClickButtonalreadyWatched(this._watchlistHandeler);

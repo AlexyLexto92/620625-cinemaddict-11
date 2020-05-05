@@ -5,8 +5,9 @@ import AbstractComponent from '../components/abstract-component.js';
 const activeClassesToOpenPopup = [`film-card__poster`, `film-card__comments`, `film-card__title`];
 
 export default class FilmController extends AbstractComponent {
-  constructor(container, popupContainer, onDataChange) {
+  constructor(container, popupContainer, onDataChange, onViewChange) {
     super();
+    this._onViewChange= onViewChange;
     this._container = container;
     this._popupContainer = popupContainer;
     this._filmComponent = null;
@@ -60,9 +61,11 @@ export default class FilmController extends AbstractComponent {
 
 
     this._filmDetail.setOnClickButtonWatchlist(() => {
+     
       const oldData = Object.assign({}, film, {});
       oldData.user_details.watchlist = !oldData.user_details.watchlist;
       this._onDataChange(this, film, oldData);
+      this._filmDetail.rerender();
     });
     this._filmDetail.setOnClickButtonalreadyWatched(() => {
       const oldData = Object.assign({}, film, {});
@@ -85,6 +88,8 @@ export default class FilmController extends AbstractComponent {
       this._filmPopupRemove(this._filmDetail);
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
+
+
   }
 
 
