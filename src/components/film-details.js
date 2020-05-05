@@ -173,7 +173,6 @@ export default class FilmCardDetail extends SmartAbstracktComponent {
   }
   setOnClickButtonWatchlist(hendler) {
     this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, hendler);
-    this.rerender();
     this._watchlistHandeler = hendler;
   }
   setOnClickButtonalreadyWatched(hendler) {
@@ -190,7 +189,6 @@ export default class FilmCardDetail extends SmartAbstracktComponent {
 
   _subscribeOnEvents() {
     this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, () => {
-      this.rerender();
     });
   }
   recoveryListeners() {
@@ -198,7 +196,7 @@ export default class FilmCardDetail extends SmartAbstracktComponent {
     this._subscribeOnEvents();
   }
   _subscribeOnEvents() {
-    const element = this.getElement();
+/*     const element = this.getElement();
 
     element.querySelector(`.film-details__control-label--watchlist`)
       .addEventListener(`click`, () => {
@@ -217,10 +215,9 @@ export default class FilmCardDetail extends SmartAbstracktComponent {
 
     element.querySelector(`.film-details__control-label--favorite`)
       .addEventListener(`click`, () => {
-        this.favorite = !this.favorite;
+        console.log(`adawdd`);
 
-        this.rerender();
-      });
+      }); */
   }
 }
 
