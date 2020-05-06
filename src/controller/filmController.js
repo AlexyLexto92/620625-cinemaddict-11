@@ -46,7 +46,7 @@ export default class FilmController extends AbstractComponent {
         document.addEventListener(`keydown`, setOnEscKeyDown);
       }
     });
-    let oldData = {};
+    let oldData = film;
     this._filmDetail.setOnCloseHendler((event) => {
       if (event.target.className === `film-details__close-btn`) {
         debugger
@@ -89,6 +89,7 @@ export default class FilmController extends AbstractComponent {
       return oldData;
     });
     this._filmDetail.setOnClickButtonWatchlistFavorite(() => {
+      debugger
       oldData = Object.assign({}, film, {});
       oldData.user_details.favorite = !oldData.user_details.favorite;
       return oldData;
