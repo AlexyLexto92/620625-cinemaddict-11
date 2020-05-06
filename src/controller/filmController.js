@@ -65,20 +65,16 @@ export default class FilmController extends AbstractComponent {
       const oldData = Object.assign({}, film, {});
       oldData.user_details.watchlist = !oldData.user_details.watchlist;
       this._onDataChange(this, film, oldData);
-      this._filmDetail.rerender();
     });
     this._filmDetail.setOnClickButtonalreadyWatched(() => {
       const oldData = Object.assign({}, film, {});
       oldData.user_details[`already_watched`] = !oldData.user_details[`already_watched`];
       this._onDataChange(this, film, oldData);
-      this._filmDetail.rerender();
-
     });
     this._filmDetail.setOnClickButtonWatchlistFavorite(() => {
       const oldData = Object.assign({}, film, {});
       oldData.user_details.favorite = !oldData.user_details.favorite;
       this._onDataChange(this, film, oldData);
-      this._filmDetail.rerender();
     });
 
     render(this._container, this._filmComponent, RenderPosition.BEFOREEND);

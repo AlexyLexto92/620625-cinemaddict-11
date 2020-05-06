@@ -168,46 +168,43 @@ export default class FilmCardDetail extends SmartAbstracktComponent {
   }
 
   setOnCloseHendler(hendler) {
-    this.getElement().addEventListener(`click`, hendler);
     this._closeHandler = hendler;
+    this.getElement().addEventListener(`click`, hendler);
+   
   }
   setOnClickButtonWatchlist(hendler) {
-    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, hendler);
     this._watchlistHandeler = hendler;
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, hendler);
+   
   }
   setOnClickButtonalreadyWatched(hendler) {
-    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, hendler);
     this._watchedHandler = hendler;
+    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, hendler);
+  
   }
   setOnClickButtonWatchlistFavorite(hendler) {
-    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, hendler);
     this._isFavoriteHandler = hendler;
-  }
-  setOnClickEmoji(hendler) {
-    this.getElement().querySelector(`.film-details__emoji-label`).addEventListener(`click`, hendler);
-  }
-
-  _subscribeOnEvents() {
-    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, () => {
-    });
+    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, hendler);
+    
   }
   recoveryListeners() {
-    this.setOnCloseHendler(this._closeHandler);
     this._subscribeOnEvents();
+    this.setOnCloseHendler(this._closeHandler);
+    this.setOnClickButtonWatchlist(this.__watchlistHandeler);
+    this.setOnClickButtonWatchlistFavorite(this._isFavoriteHandler);
+    this.setOnClickButtonWatchlistFavorite(this._isFavoriteHandler);
   }
   _subscribeOnEvents() {
-/*     const element = this.getElement();
+    const element = this.getElement();
 
     element.querySelector(`.film-details__control-label--watchlist`)
       .addEventListener(`click`, () => {
-        this.watchlist = !this.watchlist;
 
         this.rerender();
       });
 
     element.querySelector(`.film-details__control-label--watched`)
       .addEventListener(`click`, () => {
-        this.alreadyWatched = !this.alreadyWatched;
 
         this.rerender();
       });
@@ -215,9 +212,9 @@ export default class FilmCardDetail extends SmartAbstracktComponent {
 
     element.querySelector(`.film-details__control-label--favorite`)
       .addEventListener(`click`, () => {
-        console.log(`adawdd`);
 
-      }); */
+        this.rerender();
+      });
   }
 }
 
