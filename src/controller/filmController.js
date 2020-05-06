@@ -33,8 +33,8 @@ export default class FilmController extends AbstractComponent {
     });
 
     this._filmDetail.setOnCloseHendler((event) => {
-      debugger
       if (event.target.className === `film-details__close-btn`) {
+        debugger
         this._filmPopupRemove(this._filmDetail);
         document.removeEventListener(`keydown`, this._onEscKeyDown);
       }

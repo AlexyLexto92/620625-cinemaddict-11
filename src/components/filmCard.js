@@ -38,6 +38,7 @@ export default class FilmCard extends SmartAbstracktComponent {
   }
   setOnClickButtonWatchlist(hendler) {
     this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`).addEventListener(`click`, hendler);
+
   }
   setOnClickButtonalreadyWatched(hendler) {
     this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`).addEventListener(`click`, hendler);
@@ -45,4 +46,5 @@ export default class FilmCard extends SmartAbstracktComponent {
   setOnClickButtonWatchlistFavorite(hendler) {
     this.getElement().querySelector(`.film-card__controls-item--favorite`).addEventListener(`click`, hendler);
   }
+
 }
