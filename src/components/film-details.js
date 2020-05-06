@@ -170,52 +170,45 @@ export default class FilmCardDetail extends SmartAbstracktComponent {
   setOnCloseHendler(hendler) {
     this._closeHandler = hendler;
     this.getElement().addEventListener(`click`, hendler);
-   
+
+  }
+  setOnEscKeyDown(hendler) {
+    this.getElement().addEventListener(`keydown`, hendler);
   }
   setOnClickButtonWatchlist(hendler) {
     this._watchlistHandeler = hendler;
     this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, hendler);
-   
+
   }
   setOnClickButtonalreadyWatched(hendler) {
     this._watchedHandler = hendler;
     this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, hendler);
-  
+
   }
   setOnClickButtonWatchlistFavorite(hendler) {
     this._isFavoriteHandler = hendler;
     this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, hendler);
-    
+
   }
+
   recoveryListeners() {
     this._subscribeOnEvents();
     this.setOnCloseHendler(this._closeHandler);
-    this.setOnClickButtonWatchlist(this.__watchlistHandeler);
-    this.setOnClickButtonWatchlistFavorite(this._isFavoriteHandler);
-    this.setOnClickButtonWatchlistFavorite(this._isFavoriteHandler);
+    /*     this.setOnClickButtonWatchlist(this.__watchlistHandeler);
+        this.setOnClickButtonWatchlistFavorite(this._isFavoriteHandler);
+        this.setOnClickButtonWatchlistFavorite(this._isFavoriteHandler); */
   }
   _subscribeOnEvents() {
     const element = this.getElement();
 
-    element.querySelector(`.film-details__control-label--watchlist`)
+    element.querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, () => {
 
 
         this.rerender();
       });
 
-    element.querySelector(`.film-details__control-label--watched`)
-      .addEventListener(`click`, () => {
 
-        this.rerender();
-      });
-
-
-    element.querySelector(`.film-details__control-label--favorite`)
-      .addEventListener(`click`, () => {
-
-        this.rerender();
-      });
   }
 }
 

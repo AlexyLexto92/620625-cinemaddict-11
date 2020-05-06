@@ -4,6 +4,11 @@ import { render, RenderPosition, remove } from '../components/utils.js';
 import AbstractComponent from '../components/abstract-component.js';
 const activeClassesToOpenPopup = [`film-card__poster`, `film-card__comments`, `film-card__title`];
 
+const Mode = {
+  DEFAULT: `default`,
+  EDIT: `edit`,
+};
+
 export default class FilmController extends AbstractComponent {
   constructor(container, popupContainer, onDataChange, onViewChange) {
     super();
@@ -12,7 +17,7 @@ export default class FilmController extends AbstractComponent {
     this._popupContainer = popupContainer;
     this._filmComponent = null;
     this._filmDetail = null;
-    this._onEscKeyDown = this._onEscKeyDown.bind(this);
+
     this._onDataChange = onDataChange;
   }
   _filmPopupRemove(elem) {
@@ -24,70 +29,88 @@ export default class FilmController extends AbstractComponent {
     this._filmDetail = new FilmCardDetail(film);
     const cont = this._popupContainer;
 
+    const setOnEscKeyDown = (event) => {
+      debugger
+      const isEscKey = event.key === `Escape` || event.key === `Esc`;
+      if (isEscKey) {
+        this._filmPopupRemove(this._filmDetail);
+        this._onDataChange(this, film, oldData);
+        document.removeEventListener(`keydown`, setOnEscKeyDown);
+      }
+    };
+
     this._filmComponent.setOnClickHendler((evt) => {
       let target = evt.target;
       if (activeClassesToOpenPopup.includes(target.className)) {
         render(cont, this._filmDetail, RenderPosition.AFTERBEGIN);
-        document.addEventListener(`keydown`, this._onEscKeyDown);
+        document.addEventListener(`keydown`, setOnEscKeyDown);
       }
     });
-
+    let oldData = {};
     this._filmDetail.setOnCloseHendler((event) => {
       if (event.target.className === `film-details__close-btn`) {
         debugger
-        remove(this._filmDetail);
-        document.removeEventListener(`keydown`, this._onEscKeyDown);
+        this._filmPopupRemove(this._filmDetail);
+        this._onDataChange(this, film, oldData);
+        document.removeEventListener(`keydown`, setOnEscKeyDown);
       }
     });
     this._filmComponent.setOnClickButtonWatchlist((evt) => {
       evt.preventDefault();
-      const oldData = Object.assign({}, film, {});
+      oldData = Object.assign({}, film, {});
       oldData.user_details.watchlist = !oldData.user_details.watchlist;
       this._onDataChange(this, film, oldData);
     });
 
     this._filmComponent.setOnClickButtonalreadyWatched((evt) => {
       evt.preventDefault();
-      const oldData = Object.assign({}, film, {});
+      oldData = Object.assign({}, film, {});
       oldData.user_details[`already_watched`] = !oldData.user_details[`already_watched`];
       this._onDataChange(this, film, oldData);
     });
 
     this._filmComponent.setOnClickButtonWatchlistFavorite((evt) => {
+      debugger
       evt.preventDefault();
-      const oldData = Object.assign({}, film, {});
+      oldData = Object.assign({}, film, {});
       oldData.user_details.favorite = !oldData.user_details.favorite;
       this._onDataChange(this, film, oldData);
     });
 
 
     this._filmDetail.setOnClickButtonWatchlist(() => {
-      const oldData = Object.assign({}, film, {});
+      oldData = Object.assign({}, film, {});
       oldData.user_details.watchlist = !oldData.user_details.watchlist;
-      this._onDataChange(this, film, oldData);
+      return oldData;
     });
     this._filmDetail.setOnClickButtonalreadyWatched(() => {
-      const oldData = Object.assign({}, film, {});
+      oldData = Object.assign({}, film, {});
       oldData.user_details[`already_watched`] = !oldData.user_details[`already_watched`];
-      this._onDataChange(this, film, oldData);
+      return oldData;
     });
     this._filmDetail.setOnClickButtonWatchlistFavorite(() => {
-      const oldData = Object.assign({}, film, {});
+      oldData = Object.assign({}, film, {});
       oldData.user_details.favorite = !oldData.user_details.favorite;
-      this._onDataChange(this, film, oldData);
+      return oldData;
     });
+
+
+
 
     render(this._container, this._filmComponent, RenderPosition.BEFOREEND);
   }
-  _onEscKeyDown(event) {
-    const isEscKey = event.key === `Escape` || event.key === `Esc`;
 
-    if (isEscKey) {
-      this._filmPopupRemove(this._filmDetail);
-      document.removeEventListener(`keydown`, this._onEscKeyDown);
+
+  _replacePopup() {
+    this._onViewChange();
+    replaceElement(this._popupRenderPlace, this._filmPopup.getElement(), this._oldPopupComponent);
+    this._mode = Mode.EDIT;
+  }
+
+  setDefaultView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replacePopup();
     }
-
-
   }
 
 
