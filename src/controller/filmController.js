@@ -1,6 +1,6 @@
 import FilmCard from '../components/filmCard.js';
 import FilmCardDetail from '../components/film-details.js';
-import { render, RenderPosition, remove, getElement } from '../components/utils.js';
+import { render, RenderPosition, remove } from '../components/utils.js';
 import AbstractComponent from '../components/abstract-component.js';
 const activeClassesToOpenPopup = [`film-card__poster`, `film-card__comments`, `film-card__title`];
 
@@ -35,7 +35,7 @@ export default class FilmController extends AbstractComponent {
     this._filmDetail.setOnCloseHendler((event) => {
       if (event.target.className === `film-details__close-btn`) {
         debugger
-        this._filmPopupRemove(this._filmDetail);
+        remove(this._filmDetail);
         document.removeEventListener(`keydown`, this._onEscKeyDown);
       }
     });
