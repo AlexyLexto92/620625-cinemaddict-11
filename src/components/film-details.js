@@ -194,16 +194,15 @@ export default class FilmCardDetail extends SmartAbstracktComponent {
   recoveryListeners() {
     this._subscribeOnEvents();
     this.setOnCloseHendler(this._closeHandler);
-    /*     this.setOnClickButtonWatchlist(this.__watchlistHandeler);
-        this.setOnClickButtonWatchlistFavorite(this._isFavoriteHandler);
-        this.setOnClickButtonWatchlistFavorite(this._isFavoriteHandler); */
+    this.setOnClickButtonWatchlist(this.__watchlistHandeler);
+    this.setOnClickButtonWatchlistFavorite(this._isFavoriteHandler);
+    this.setOnClickButtonWatchlistFavorite(this._isFavoriteHandler);
   }
   _subscribeOnEvents() {
     const element = this.getElement();
 
     element.querySelector(`.film-details__close-btn`)
       .addEventListener(`click`, () => {
-
 
         this.rerender();
       });

@@ -1,5 +1,3 @@
-import FilmCard from '../components/filmCard.js';
-import FilmCardDetail from '../components/film-details.js';
 import TopComment from '../components/topComment.js';
 import TopRated from '../components/topRated.js';
 import Sort, { SortType } from '../components/sort.js';

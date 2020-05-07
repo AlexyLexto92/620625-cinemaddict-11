@@ -1,4 +1,4 @@
-import {createElement, removeElement} from './utils.js';
+import {createElement} from './utils.js';
 export default class AbstractComponent {
   constructor() {
     this._element = null;
@@ -19,7 +19,6 @@ export default class AbstractComponent {
   }
 
   removeElement() {
-    removeElement(this._element);
     this._element = null;
   }
 

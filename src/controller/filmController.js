@@ -1,7 +1,7 @@
 import FilmCard from '../components/filmCard.js';
 import FilmCardDetail from '../components/film-details.js';
-import { render, RenderPosition, remove } from '../components/utils.js';
-import AbstractComponent from '../components/abstract-component.js';
+import { render, RenderPosition, remove, replaceElement } from '../components/utils.js';
+import SmartAbstracktComponent from '../components/smart-abstract-component.js';
 const activeClassesToOpenPopup = [`film-card__poster`, `film-card__comments`, `film-card__title`];
 
 const Mode = {
@@ -9,7 +9,7 @@ const Mode = {
   EDIT: `edit`,
 };
 
-export default class FilmController extends AbstractComponent {
+export default class FilmController extends SmartAbstracktComponent {
   constructor(container, popupContainer, onDataChange, onViewChange) {
     super();
     this._onViewChange = onViewChange;
@@ -23,14 +23,13 @@ export default class FilmController extends AbstractComponent {
   _filmPopupRemove(elem) {
     remove(elem);
   }
-  render(film) {
 
+  render(film) {
     this._filmComponent = new FilmCard(film);
     this._filmDetail = new FilmCardDetail(film);
     const cont = this._popupContainer;
 
     const setOnEscKeyDown = (event) => {
-      debugger
       const isEscKey = event.key === `Escape` || event.key === `Esc`;
       if (isEscKey) {
         this._filmPopupRemove(this._filmDetail);
@@ -49,7 +48,6 @@ export default class FilmController extends AbstractComponent {
     let oldData = film;
     this._filmDetail.setOnCloseHendler((event) => {
       if (event.target.className === `film-details__close-btn`) {
-        debugger
         this._filmPopupRemove(this._filmDetail);
         this._onDataChange(this, film, oldData);
         document.removeEventListener(`keydown`, setOnEscKeyDown);
@@ -70,7 +68,6 @@ export default class FilmController extends AbstractComponent {
     });
 
     this._filmComponent.setOnClickButtonWatchlistFavorite((evt) => {
-      debugger
       evt.preventDefault();
       oldData = Object.assign({}, film, {});
       oldData.user_details.favorite = !oldData.user_details.favorite;
@@ -89,16 +86,13 @@ export default class FilmController extends AbstractComponent {
       return oldData;
     });
     this._filmDetail.setOnClickButtonWatchlistFavorite(() => {
-      debugger
       oldData = Object.assign({}, film, {});
       oldData.user_details.favorite = !oldData.user_details.favorite;
       return oldData;
     });
 
-
-
-
     render(this._container, this._filmComponent, RenderPosition.BEFOREEND);
+
   }
 
 
