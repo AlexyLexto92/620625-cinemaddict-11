@@ -1,9 +1,9 @@
 import Profile from './components/profile.js';
 import Menu from './components/menu.js';
 import Filter from './components/filters.js';
-import FilmList from './components/filmList.js';
-import FooterStatistic from './components/footerStatistic.js';
-import PageController from './controller/filmsController.js';
+import FilmList from './components/film-List.js';
+import FooterStatistic from './components/footer-Statistic.js';
+import PageController from './controller/films-Controller.js';
 import {dataFilms, filtersData} from './components/mock.js';
 import {render, RenderPosition} from './components/utils.js';
 

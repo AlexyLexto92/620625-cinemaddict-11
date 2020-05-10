@@ -1,4 +1,4 @@
-import FilmCard from '../components/filmCard.js';
+import FilmCard from '../components/film-Card.js';
 import FilmCardDetail from '../components/film-details.js';
 import {render, RenderPosition, remove, replaceElement} from '../components/utils.js';
 import SmartAbstracktComponent from '../components/smart-abstract-component.js';

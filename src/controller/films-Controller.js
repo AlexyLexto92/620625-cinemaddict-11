@@ -1,11 +1,11 @@
-import TopComment from '../components/topComment.js';
-import TopRated from '../components/topRated.js';
+import TopComment from '../components/top-Comment.js';
+import TopRated from '../components/top-Rated.js';
 import Sort, {SortType} from '../components/sort.js';
-import LoadButton from '../components/buttonMore.js';
+import LoadButton from '../components/button-More.js';
 import NoFilms from '../components/no-films.js';
 import {dataFilms} from '../components/mock.js';
 import {render, RenderPosition, remove} from '../components/utils.js';
-import FilmController from '../controller/filmController.js';
+import FilmController from './film-Controller.js';
 
 const FILM = {
   START: 0,
