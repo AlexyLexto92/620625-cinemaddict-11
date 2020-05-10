@@ -1,4 +1,4 @@
-import AbstractComponent from './abstract-component.js';
+import SmartAbstracktComponent from './smart-abstract-component.js';
 export const getSiteFilmCard = ({id, film_info: filmInfo, user_details: userDetails, comments}) => {
   let {title, total_rating: totalRating, poster, release: {date}, runtime, genre, description} = filmInfo;
   let {watchlist, already_watched: alreadyWatched, favorite} = userDetails;
@@ -22,15 +22,40 @@ export const getSiteFilmCard = ({id, film_info: filmInfo, user_details: userDeta
         </article>`
   );
 };
-export default class FilmCard extends AbstractComponent {
+export default class FilmCard extends SmartAbstracktComponent {
   constructor(card) {
     super();
     this._card = card;
+    this._subscribeOnEvents();
   }
   getTemplate() {
     return getSiteFilmCard(this._card);
   }
+  rerender() {
+    super.rerender();
+  }
   setOnClickHendler(hendler) {
     this.getElement().addEventListener(`click`, hendler);
+  }
+  setOnClickButtonWatchlist(hendler) {
+    this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`).addEventListener(`click`, hendler);
+
+  }
+  setOnClickButtonalreadyWatched(hendler) {
+    this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`).addEventListener(`click`, hendler);
+  }
+  setOnClickButtonWatchlistFavorite(hendler) {
+    this.getElement().querySelector(`.film-card__controls-item--favorite`).addEventListener(`click`, hendler);
+  }
+  _subscribeOnEvents() {
+    const element = this.getElement();
+
+    element.querySelector(`.film-card__controls-item--add-to-watchlist`)
+      .addEventListener(`click`, () => {
+
+        this.rerender();
+      });
+
+
   }
 }

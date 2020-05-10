@@ -1,4 +1,4 @@
-import AbstractComponent from './abstract-component.js';
+import SmartAbstracktComponent from './smart-abstract-component.js';
 export const getFilmDetails = ({id, film_info: filmInfo, user_details: userDetails, comments}) => {
   let {title, alternative_title: altTitle, total_rating: totalRating, poster, age_rating: ageRating, director, writers, actors, release: {date, release_country: releaseCounry}, runtime, genre, description} = filmInfo;
   let {watchlist, already_watched: alreadyWatched, favorite} = userDetails;
@@ -70,7 +70,7 @@ export const getFilmDetails = ({id, film_info: filmInfo, user_details: userDetai
                 </tbody></table>
 
                 <p class="film-details__film-description">
-                ${description}    
+                ${description}
                 </p>
             </div>
         </div>
@@ -97,7 +97,7 @@ export const getFilmDetails = ({id, film_info: filmInfo, user_details: userDetai
     ${comments ? comments.map((it) =>
       `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
-        <img src="./images/emoji/${it.emotion}" width="55" height="55" alt="emoji">
+        <img src="./images/emoji/${it.emotion}.png" width="55" height="55" alt="emoji">
       </span>
       <div>
         <p class="film-details__comment-text">
@@ -147,15 +147,65 @@ export const getFilmDetails = ({id, film_info: filmInfo, user_details: userDetai
 </section>`
   );
 };
-export default class FilmCardDetail extends AbstractComponent {
+export default class FilmCardDetail extends SmartAbstracktComponent {
   constructor(card) {
     super();
     this._card = card;
+    this._closeHandler = null;
+    this._watchlistHandeler = null;
+    this._watchedHandler = null;
+    this._isFavoriteHandler = null;
+    this.watchlist = this._card.user_details.watchlist;
+    this.alreadyWatched = this._card.user_details.already_watched;
+    this.favorite = this._card.user_details.favorite;
+    this._subscribeOnEvents();
   }
   getTemplate() {
     return getFilmDetails(this._card);
   }
+  rerender() {
+    super.rerender();
+  }
+
   setOnCloseHendler(hendler) {
+    this._closeHandler = hendler;
     this.getElement().addEventListener(`click`, hendler);
+
+  }
+  setOnEscKeyDown(hendler) {
+    this.getElement().addEventListener(`keydown`, hendler);
+  }
+  setOnClickButtonWatchlist(hendler) {
+    this._watchlistHandeler = hendler;
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, hendler);
+
+  }
+  setOnClickButtonalreadyWatched(hendler) {
+    this._watchedHandler = hendler;
+    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, hendler);
+
+  }
+  setOnClickButtonWatchlistFavorite(hendler) {
+    this._isFavoriteHandler = hendler;
+    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, hendler);
+
+  }
+
+  recoveryListeners() {
+    this._subscribeOnEvents();
+    this.setOnCloseHendler(this._closeHandler);
+    this.setOnClickButtonWatchlist(this.__watchlistHandeler);
+    this.setOnClickButtonWatchlistFavorite(this._isFavoriteHandler);
+    this.setOnClickButtonWatchlistFavorite(this._isFavoriteHandler);
+  }
+  _subscribeOnEvents() {
+    const element = this.getElement();
+
+    element.querySelector(`.film-details__close-btn`)
+      .addEventListener(`click`, () => {
+
+        this.rerender();
+      });
   }
 }
+
