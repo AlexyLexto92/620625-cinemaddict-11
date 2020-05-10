@@ -1,3 +1,6 @@
+import moment from 'moment';
+import momentDurationFormatSetup from "moment-duration-format";
+momentDurationFormatSetup(moment);
 export const randomInteger = (min, max) => {
   let rand = min + Math.random() * (max + 1 - min);
   return Math.floor(rand);
@@ -35,4 +38,9 @@ export const remove = (component) => {
 };
 export const replaceElement = (parentElement, replacementElement, replaceableElement) => {
   parentElement.replaceChild(replacementElement, replaceableElement);
+};
+export const getFilmDuration = (movieDuration) => {
+  const duration = moment.duration(movieDuration, `minutes`).format(`h[h] m[m]`);
+
+  return duration;
 };

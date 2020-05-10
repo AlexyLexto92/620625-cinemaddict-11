@@ -1,4 +1,6 @@
 import SmartAbstracktComponent from './smart-abstract-component.js';
+import {getFilmDuration} from '../components/utils.js';
+import moment from 'moment';
 export const getSiteFilmCard = ({id, film_info: filmInfo, user_details: userDetails, comments}) => {
   let {title, total_rating: totalRating, poster, release: {date}, runtime, genre, description} = filmInfo;
   let {watchlist, already_watched: alreadyWatched, favorite} = userDetails;
@@ -7,8 +9,8 @@ export const getSiteFilmCard = ({id, film_info: filmInfo, user_details: userDeta
           <h3 data-id="${id}" class="film-card__title">${title}</h3>
           <p class="film-card__rating">${totalRating}</p>
           <p class="film-card__info">
-            <span class="film-card__year">${ new Date(date).getFullYear()}</span>
-            <span class="film-card__duration">${runtime}</span>
+            <span class="film-card__year">${ moment(date).format(`YYYY`)}</span>
+            <span class="film-card__duration">${getFilmDuration(runtime)}</span>
             <span class="film-card__genre">${genre.length > 0 ? genre[0] : ``}</span>
           </p>
           <img data-id="${id}"  src="${poster}" alt="" class="film-card__poster">

@@ -18,5 +18,10 @@
   },
   "engines": {
     "node": "10"
+  },
+  "dependencies": {
+    "moment": "^2.25.3",
+    "moment-duration-format": "^2.3.2",
+    "moment-locales-webpack-plugin": "^1.2.0"
   }
 }

@@ -1,8 +1,9 @@
 import SmartAbstracktComponent from './smart-abstract-component.js';
+import moment from 'moment';
+import {getFilmDuration} from '../components/utils.js';
 export const getFilmDetails = ({id, film_info: filmInfo, user_details: userDetails, comments}) => {
   let {title, alternative_title: altTitle, total_rating: totalRating, poster, age_rating: ageRating, director, writers, actors, release: {date, release_country: releaseCounry}, runtime, genre, description} = filmInfo;
   let {watchlist, already_watched: alreadyWatched, favorite} = userDetails;
-  let months = [`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`, `October`, `November`, `December`];
   return (
     `<section class="film-details">
 <form class="film-details__inner" action="" method="get">
@@ -50,11 +51,11 @@ export const getFilmDetails = ({id, film_info: filmInfo, user_details: userDetai
                     </tr>
                     <tr class="film-details__row">
                         <td class="film-details__term">Release Date</td>
-                        <td class="film-details__cell">${new Date(date).getDate()} ${months[new Date(date).getMonth()]} ${new Date(date).getFullYear()}</td>
+                        <td class="film-details__cell">${moment(date).format(`Do MMMM YYYY`)}</td>
                     </tr>
                     <tr class="film-details__row">
                         <td class="film-details__term">Runtime</td>
-                        <td class="film-details__cell">${runtime}</td>
+                        <td class="film-details__cell">${getFilmDuration(runtime)}</td>
                     </tr>
                     <tr class="film-details__row">
                         <td class="film-details__term">Country</td>
