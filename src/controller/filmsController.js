@@ -1,10 +1,10 @@
 import TopComment from '../components/topComment.js';
 import TopRated from '../components/topRated.js';
-import Sort, { SortType } from '../components/sort.js';
+import Sort, {SortType} from '../components/sort.js';
 import LoadButton from '../components/buttonMore.js';
 import NoFilms from '../components/no-films.js';
-import { dataFilms } from '../components/mock.js';
-import { render, RenderPosition, remove } from '../components/utils.js';
+import {dataFilms} from '../components/mock.js';
+import {render, RenderPosition, remove} from '../components/utils.js';
 import FilmController from '../controller/filmController.js';
 
 const FILM = {
@@ -23,9 +23,9 @@ const COMMENT = {
 };
 let startFilmCount = FILM.START;
 
-const renderFilm = (containerElement, films, popupContainer, onDataChange,onViewChange) => {
+const renderFilm = (containerElement, films, popupContainer, onDataChange, onViewChange) => {
   films.map((film) => {
-    const filmController = new FilmController(containerElement, popupContainer, onDataChange,onViewChange);
+    const filmController = new FilmController(containerElement, popupContainer, onDataChange, onViewChange);
     filmController.render(film);
     return filmController;
   });
@@ -65,6 +65,7 @@ export default class PageController {
     this._sort = new Sort();
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
+    this._showedTaskControllers = [];
   }
 
   render(films) {
@@ -96,7 +97,6 @@ export default class PageController {
 
       sliceFilms = this._films.slice(startFilmCount, endFilmCount);
       renderFilm(container.querySelector(`.films-list__container--top`), sliceFilms, this._popupContainer, this._onDataChange, this._onViewChange);
-
 
 
       const filmsCards = filmListContainerTop.querySelectorAll(`.film-card__poster`);
@@ -146,7 +146,7 @@ export default class PageController {
       const soretedFilms = getSortedFilms(this._films, sortType, 0, FILM.END);
       const filmListElement = container.querySelector(`.films-list__container--top`);
       filmListElement.innerHTML = ``;
-      renderFilm(filmListElement, soretedFilms.slice(0, FILM.END), this._popupContainer, this._onDataChange,this._onViewChange);
+      this._showedTaskControllers = renderFilm(filmListElement, soretedFilms.slice(0, FILM.END), this._popupContainer, this._onDataChange, this._onViewChange);
 
     });
   }
@@ -161,7 +161,7 @@ export default class PageController {
 
     filmController.render(this._films[index]);
   }
-  _onViewChange(){
-
+  _onViewChange() {
+    this._showedTaskControllers.forEach((it) => it.setDefaultView());
   }
 }

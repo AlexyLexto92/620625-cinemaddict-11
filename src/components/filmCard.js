@@ -1,7 +1,7 @@
 import SmartAbstracktComponent from './smart-abstract-component.js';
-export const getSiteFilmCard = ({ id, film_info: filmInfo, user_details: userDetails, comments }) => {
-  let { title, total_rating: totalRating, poster, release: { date }, runtime, genre, description } = filmInfo;
-  let { watchlist, already_watched: alreadyWatched, favorite } = userDetails;
+export const getSiteFilmCard = ({id, film_info: filmInfo, user_details: userDetails, comments}) => {
+  let {title, total_rating: totalRating, poster, release: {date}, runtime, genre, description} = filmInfo;
+  let {watchlist, already_watched: alreadyWatched, favorite} = userDetails;
   return (
     `<article class="film-card">
           <h3 data-id="${id}" class="film-card__title">${title}</h3>

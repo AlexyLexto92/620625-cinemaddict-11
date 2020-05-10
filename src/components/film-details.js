@@ -1,7 +1,7 @@
 import SmartAbstracktComponent from './smart-abstract-component.js';
-export const getFilmDetails = ({ id, film_info: filmInfo, user_details: userDetails, comments }) => {
-  let { title, alternative_title: altTitle, total_rating: totalRating, poster, age_rating: ageRating, director, writers, actors, release: { date, release_country: releaseCounry }, runtime, genre, description } = filmInfo;
-  let { watchlist, already_watched: alreadyWatched, favorite } = userDetails;
+export const getFilmDetails = ({id, film_info: filmInfo, user_details: userDetails, comments}) => {
+  let {title, alternative_title: altTitle, total_rating: totalRating, poster, age_rating: ageRating, director, writers, actors, release: {date, release_country: releaseCounry}, runtime, genre, description} = filmInfo;
+  let {watchlist, already_watched: alreadyWatched, favorite} = userDetails;
   let months = [`January`, `February`, `March`, `April`, `May`, `June`, `July`, `August`, `September`, `October`, `November`, `December`];
   return (
     `<section class="film-details">
@@ -206,8 +206,6 @@ export default class FilmCardDetail extends SmartAbstracktComponent {
 
         this.rerender();
       });
-
-
   }
 }
 

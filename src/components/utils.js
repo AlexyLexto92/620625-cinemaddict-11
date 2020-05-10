@@ -34,6 +34,5 @@ export const remove = (component) => {
   component.removeElement();
 };
 export const replaceElement = (parentElement, replacementElement, replaceableElement) => {
-  debugger
   parentElement.replaceChild(replacementElement, replaceableElement);
 };

@@ -1,6 +1,6 @@
 import FilmCard from '../components/filmCard.js';
 import FilmCardDetail from '../components/film-details.js';
-import { render, RenderPosition, remove, replaceElement } from '../components/utils.js';
+import {render, RenderPosition, remove, replaceElement} from '../components/utils.js';
 import SmartAbstracktComponent from '../components/smart-abstract-component.js';
 const activeClassesToOpenPopup = [`film-card__poster`, `film-card__comments`, `film-card__title`];
 
@@ -17,14 +17,15 @@ export default class FilmController extends SmartAbstracktComponent {
     this._popupContainer = popupContainer;
     this._filmComponent = null;
     this._filmDetail = null;
-
     this._onDataChange = onDataChange;
+    this._oldPopupComponent = null;
   }
   _filmPopupRemove(elem) {
     remove(elem);
   }
 
   render(film) {
+    const oldFilmComponent = this._filmComponent;
     this._filmComponent = new FilmCard(film);
     this._filmDetail = new FilmCardDetail(film);
     const cont = this._popupContainer;
@@ -41,7 +42,14 @@ export default class FilmController extends SmartAbstracktComponent {
     this._filmComponent.setOnClickHendler((evt) => {
       let target = evt.target;
       if (activeClassesToOpenPopup.includes(target.className)) {
-        render(cont, this._filmDetail, RenderPosition.AFTERBEGIN);
+
+        this._oldPopupComponent = this._popupContainer.querySelector(`.film-details`);
+        if (this._oldPopupComponent) {
+          this._replacePopup();
+          this._mode = Mode.DEFAULT;
+        } else {
+          render(cont, this._filmDetail, RenderPosition.AFTERBEGIN);
+        }
         document.addEventListener(`keydown`, setOnEscKeyDown);
       }
     });
@@ -90,15 +98,18 @@ export default class FilmController extends SmartAbstracktComponent {
       oldData.user_details.favorite = !oldData.user_details.favorite;
       return oldData;
     });
-
-    render(this._container, this._filmComponent, RenderPosition.BEFOREEND);
-
+    if (oldFilmComponent) {
+      replaceElement(this._container, this._filmComponent.getElement(), oldFilmComponent.getElement());
+    } else {
+      render(this._container, this._filmComponent, RenderPosition.BEFOREEND);
+    }
   }
 
 
   _replacePopup() {
+    const cont = this._popupContainer;
     this._onViewChange();
-    replaceElement(this._popupRenderPlace, this._filmPopup.getElement(), this._oldPopupComponent);
+    replaceElement(cont, this._filmDetail.getElement(), this._oldPopupComponent);
     this._mode = Mode.EDIT;
   }
 

@@ -21,7 +21,7 @@ filtersData.forEach((element) => {
 
 
 const filmList = new FilmList();
-const pageController = new PageController(filmList,footer);
+const pageController = new PageController(filmList, footer);
 render(siteMainElement, filmList, RenderPosition.BEFOREEND);
 pageController.render(dataFilms);
 
