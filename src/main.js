@@ -6,11 +6,13 @@ import FooterStatistic from './components/footer-Statistic.js';
 import PageController from './controller/films-Controller.js';
 import {dataFilms, filtersData} from './components/mock.js';
 import {render, RenderPosition} from './components/utils.js';
+import MovieModel from './models/movie.js';
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 let footer = document.querySelector(`.footer`);
-
+const movieModel = new MovieModel();
+movieModel.setMovie(dataFilms);
 const menu = new Menu();
 const Topfilters = menu.getElement().querySelector(`.main-navigation__items`);
 render(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
@@ -21,8 +23,8 @@ filtersData.forEach((element) => {
 
 
 const filmList = new FilmList();
-const pageController = new PageController(filmList, footer);
+const pageController = new PageController(filmList, footer, movieModel);
 render(siteMainElement, filmList, RenderPosition.BEFOREEND);
-pageController.render(dataFilms);
+pageController.render();
 
 render(footer, new FooterStatistic(dataFilms.length), RenderPosition.BEFOREEND);

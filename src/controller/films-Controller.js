@@ -3,7 +3,7 @@ import TopRated from '../components/top-Rated.js';
 import Sort, {SortType} from '../components/sort.js';
 import LoadButton from '../components/button-More.js';
 import NoFilms from '../components/no-films.js';
-import {dataFilms} from '../components/mock.js';
+/* import {dataFilms} from '../components/mock.js'; */
 import {render, RenderPosition, remove} from '../components/utils.js';
 import FilmController from './film-Controller.js';
 
@@ -54,9 +54,8 @@ const getSortedFilms = (films, sortType, from, to) => {
 
 
 export default class PageController {
-  constructor(container, popupContainer) {
+  constructor(container, popupContainer, movieModel) {
     this._popupContainer = popupContainer;
-    this._films = [];
     this._container = container;
     this._ratedTopFillms = new TopRated();
     this._commentTopFilms = new TopComment();
@@ -66,9 +65,11 @@ export default class PageController {
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
     this._showedTaskControllers = [];
+    this._movieModel = movieModel;
   }
 
-  render(films) {
+  render() {
+    const films = this._movieModel.getMovies();
     this._films = films;
     const container = this._container.getElement();
     let countOfFilms = this._films.length;
@@ -101,7 +102,7 @@ export default class PageController {
 
       const filmsCards = filmListContainerTop.querySelectorAll(`.film-card__poster`);
       const filmLength = Array.from(filmsCards).length;
-      if (filmLength >= dataFilms.length - 1) {
+      if (filmLength >= this._films.length - 1) {
         remove(this._loadMoreButtonComponent);
       }
     };
@@ -138,8 +139,8 @@ export default class PageController {
         renderCategoryFilms(slicedFilms);
       }
     };
-    getTopCategoryFilms(dataFilms, `rating`);
-    getTopCategoryFilms(dataFilms);
+    getTopCategoryFilms(this._films, `rating`);
+    getTopCategoryFilms(this._films);
 
 
     this._sort.setSortTypeChangeHandler((sortType) => {
@@ -151,15 +152,10 @@ export default class PageController {
     });
   }
   _onDataChange(filmController, oldData, newData) {
-    const index = this._films.findIndex((it) => it === oldData);
-
-    if (index === -1) {
-      return;
+    const isSuccess = this._movieModel.updateMovie(oldData.id, newData);
+    if (isSuccess) {
+      filmController.render(newData);
     }
-
-    this._films = [].concat(this._films.slice(0, index), newData, this._films.slice(index + 1));
-
-    filmController.render(this._films[index]);
   }
   _onViewChange() {
     this._showedTaskControllers.forEach((it) => it.setDefaultView());

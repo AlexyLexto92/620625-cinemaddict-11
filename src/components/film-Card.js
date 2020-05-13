@@ -28,14 +28,11 @@ export default class FilmCard extends SmartAbstracktComponent {
   constructor(card) {
     super();
     this._card = card;
-    this._subscribeOnEvents();
   }
   getTemplate() {
     return getSiteFilmCard(this._card);
   }
-  rerender() {
-    super.rerender();
-  }
+
   setOnClickHendler(hendler) {
     this.getElement().addEventListener(`click`, hendler);
   }
@@ -48,16 +45,5 @@ export default class FilmCard extends SmartAbstracktComponent {
   }
   setOnClickButtonWatchlistFavorite(hendler) {
     this.getElement().querySelector(`.film-card__controls-item--favorite`).addEventListener(`click`, hendler);
-  }
-  _subscribeOnEvents() {
-    const element = this.getElement();
-
-    element.querySelector(`.film-card__controls-item--add-to-watchlist`)
-      .addEventListener(`click`, () => {
-
-        this.rerender();
-      });
-
-
   }
 }
