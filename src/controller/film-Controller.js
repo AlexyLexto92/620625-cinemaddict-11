@@ -118,6 +118,11 @@ export default class FilmController extends SmartAbstracktComponent {
       this._replacePopup();
     }
   }
+  destroy() {
+    remove(this._filmDetail);
+    remove(this._filmComponent);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
 
 
 }
