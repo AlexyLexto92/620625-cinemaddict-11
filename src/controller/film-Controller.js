@@ -8,8 +8,9 @@ export const MODE = {
   OLD: `old`,
   NEW: `new`,
 };
-const renderComments = (containerElement, mode, array = []) => {
-  const commentController = new CommentController(containerElement, mode);
+const renderComments = (containerElement, mode,movieModel, array = []) => {
+  debugger
+  const commentController = new CommentController(containerElement, mode, movieModel);
   if (array.length >= 1) {
 
     return array.map((comment) => {
@@ -27,7 +28,7 @@ const Mode = {
 };
 
 export default class FilmController extends SmartAbstracktComponent {
-  constructor(container, popupContainer, onDataChange, onViewChange) {
+  constructor(container, popupContainer, onDataChange, onViewChange,movieModel) {
     super();
     this._onViewChange = onViewChange;
     this._container = container;
@@ -37,14 +38,16 @@ export default class FilmController extends SmartAbstracktComponent {
     this._onDataChange = onDataChange;
     this._oldPopupComponent = null;
     this._showedCommentsControllers = [];
+    this._movieModel = movieModel;
 
   }
   _filmPopupRemove(elem) {
     remove(elem);
   }
-  _renderComments(film) {
+  _renderComments(id) {
+    debugger
     const container = document.querySelector(`.film-details__comments-list`);
-    const newComments = renderComments(container, MODE.OLD, film.comments);
+    const newComments = renderComments(container, MODE.OLD,this._movieModel.getComments(id));
     this.__showedCommentsControllers = this._showedCommentsControllers.concat(newComments);
   }
   _renderAddComment() {
@@ -77,7 +80,7 @@ export default class FilmController extends SmartAbstracktComponent {
           this._mode = Mode.DEFAULT;
         } else {
           render(cont, this._filmDetail, RenderPosition.AFTERBEGIN);
-          this._renderComments(film);
+          this._renderComments(film.id);
           this._renderAddComment();
 
         }

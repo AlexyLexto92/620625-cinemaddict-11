@@ -1,10 +1,11 @@
-import {getMoviesByFilter, FilterType} from '../components/utils.js';
+import { getMoviesByFilter, FilterType } from '../components/utils.js';
 export default class Movies {
   constructor() {
     this._movies = [];
     this._activeFilterType = FilterType.ALL;
     this._dataChangeHandlers = [];
     this._filterChangeHandlers = [];
+    this._comments = [];
   }
 
   getMovies() {
@@ -49,6 +50,10 @@ export default class Movies {
   _callHandlers(handlers) {
     handlers.forEach((handler) => handler());
   }
-
+  getComments(id) {
+    debugger
+   this._id = id;
+    this._comments = this._movies.this._id.comments;
+  }
 }
 

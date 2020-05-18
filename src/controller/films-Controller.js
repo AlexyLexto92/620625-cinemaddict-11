@@ -22,9 +22,9 @@ const COMMENT = {
 };
 let startFilmCount = FILM.START;
 
-const renderFilm = (containerElement, films, popupContainer, onDataChange, onViewChange) => {
+const renderFilm = (containerElement, films, popupContainer, onDataChange, onViewChange,movieModel) => {
   return films.map((film) => {
-    const filmController = new FilmController(containerElement, popupContainer, onDataChange, onViewChange);
+    const filmController = new FilmController(containerElement, popupContainer, onDataChange, onViewChange, movieModel);
     filmController.render(film);
     return filmController;
   });
@@ -94,7 +94,7 @@ export default class PageController {
       let end = 0;
       let slicedFilms;
       let renderCategoryFilms = (array) => {
-        renderFilm(TopCategoryFilmsContainer, array, this._popupContainer, this._onDataChange, this._onViewChange);
+        renderFilm(TopCategoryFilmsContainer, array, this._popupContainer, this._onDataChange, this._onViewChange,this._movieModel);
       };
       if (Topcategory === `rating`) {
         let ratingArr = data.slice().sort((a, b) => {
@@ -159,7 +159,7 @@ export default class PageController {
   }
   _renderMovies(films) {
     const cont = document.querySelector(`.films-list__container--top`);
-    let newMovies = renderFilm(cont, films, this._popupContainer, this._onDataChange, this._onViewChange);
+    let newMovies = renderFilm(cont, films, this._popupContainer, this._onDataChange, this._onViewChange, this._movieModel);
     this._showedMoviesControllers = this._showedMoviesControllers.concat(newMovies);
     this._showedMoviesCount = this._showedMoviesControllers.length;
   }
