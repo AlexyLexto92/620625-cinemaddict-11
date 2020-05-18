@@ -49,12 +49,14 @@ export default class FilmController extends SmartAbstracktComponent {
   }
   _renderComments(film) {
     this._commentModel.setComment(film);
+    this._createComments();
+  }
+  _createComments() {
     this._comments = this._commentModel.getComments();
     const container = document.querySelector(`.film-details__comments-list`);
     const newComments = renderComments(container, MODE.OLD, this._onCommentsChange, this._comments);
     this._showedCommentsControllers = this._showedCommentsControllers.concat(newComments);
   }
-
   _removeComments() {
     this._showedCommentsControllers.forEach((commentController) => commentController.destroy());
     this._showedCommentsControllers = [];
@@ -168,14 +170,19 @@ export default class FilmController extends SmartAbstracktComponent {
   }
 
   _onCommentsChange(commentController, newData, oldData) {
-    const isSuccess = this._commentModel.updateComments(oldData.id, newData);
-    if (isSuccess) {
-
+    if (!oldData) {
+      this._commentModel.addComment(newData);
       this._removeComments();
-      this._comments = this._commentModel.getComments();
-      const container = document.querySelector(`.film-details__comments-list`);
-      const newComments = renderComments(container, MODE.OLD, this._onCommentsChange, this._comments);
-      this._showedCommentsControllers = this._showedCommentsControllers.concat(newComments);
+      this._createComments();
+    } else {
+
+      const isSuccess = this._commentModel.updateComments(oldData.id, newData);
+      if (isSuccess) {
+        this._removeComments();
+        this._createComments();
+      }
+
+
     }
   }
 

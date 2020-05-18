@@ -1,4 +1,5 @@
 import AbstractComponent from "./abstract-component";
+import moment from 'moment';
 
 export const getComments = ({author, comment, date, emotion, id}) => {
   return (
@@ -10,9 +11,8 @@ export const getComments = ({author, comment, date, emotion, id}) => {
         <p class="film-details__comment-text">
          ${comment}
         </p>
-        <p class="film-details__comment-info">
-          <span class="film-details__comment-author">${author}</span>
-          <span class="film-details__comment-day">${date}</span>
+        <p class="film-details__comment-info">${author ? `<span class="film-details__comment-author">${author}</span>` : ``}
+          <span class="film-details__comment-day">${moment(date).startOf(`day`).fromNow()}</span>
           <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>

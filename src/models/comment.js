@@ -11,6 +11,8 @@ export default class Comment {
     return this._comments;
   }
   updateComments(id, comment) {
+
+
     const index = this._comments.findIndex((it) => it.id === id);
 
     if (index === -1) {
@@ -22,6 +24,9 @@ export default class Comment {
       this._comments = [].concat(this._comments.slice(0, index), comment, this._comments.slice(index + 1));
     }
     return true;
+  }
+  addComment(comment) {
+    this._comments.push(comment);
   }
 }
 
