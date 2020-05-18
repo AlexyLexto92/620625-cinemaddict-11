@@ -8,19 +8,21 @@ export const MODE = {
   OLD: `old`,
   NEW: `new`,
 };
-const renderComments = (containerElement, mode,movieModel, array = []) => {
-  debugger
-  const commentController = new CommentController(containerElement, mode, movieModel);
+const renderComments = (containerElement, mode, _onCommentsChange, array = []) => {
+
   if (array.length >= 1) {
 
     return array.map((comment) => {
-
+      const commentController = new CommentController(containerElement, mode, _onCommentsChange);
       commentController.render(comment);
+      return commentController;
     });
   } else {
+    const commentController = new CommentController(containerElement, mode, _onCommentsChange);
     commentController.render();
+    return commentController;
   }
-  return commentController;
+
 };
 const Mode = {
   DEFAULT: `default`,
@@ -28,7 +30,7 @@ const Mode = {
 };
 
 export default class FilmController extends SmartAbstracktComponent {
-  constructor(container, popupContainer, onDataChange, onViewChange,movieModel) {
+  constructor(container, popupContainer, onDataChange, onViewChange, movieModel, commentModel) {
     super();
     this._onViewChange = onViewChange;
     this._container = container;
@@ -39,20 +41,27 @@ export default class FilmController extends SmartAbstracktComponent {
     this._oldPopupComponent = null;
     this._showedCommentsControllers = [];
     this._movieModel = movieModel;
-
+    this._commentModel = commentModel;
+    this._onCommentsChange = this._onCommentsChange.bind(this);
   }
   _filmPopupRemove(elem) {
     remove(elem);
   }
-  _renderComments(id) {
-    debugger
+  _renderComments(film) {
+    this._commentModel.setComment(film);
+    this._comments = this._commentModel.getComments();
     const container = document.querySelector(`.film-details__comments-list`);
-    const newComments = renderComments(container, MODE.OLD,this._movieModel.getComments(id));
-    this.__showedCommentsControllers = this._showedCommentsControllers.concat(newComments);
+    const newComments = renderComments(container, MODE.OLD, this._onCommentsChange, this._comments);
+    this._showedCommentsControllers = this._showedCommentsControllers.concat(newComments);
+  }
+
+  _removeComments() {
+    this._showedCommentsControllers.forEach((commentController) => commentController.destroy());
+    this._showedCommentsControllers = [];
   }
   _renderAddComment() {
     const container = document.querySelector(`.film-details__comments-wrap`);
-    renderComments(container, MODE.NEW);
+    renderComments(container, MODE.NEW, this._onCommentsChange);
   }
 
   render(film) {
@@ -80,7 +89,7 @@ export default class FilmController extends SmartAbstracktComponent {
           this._mode = Mode.DEFAULT;
         } else {
           render(cont, this._filmDetail, RenderPosition.AFTERBEGIN);
-          this._renderComments(film.id);
+          this._renderComments(film);
           this._renderAddComment();
 
         }
@@ -156,6 +165,18 @@ export default class FilmController extends SmartAbstracktComponent {
     remove(this._filmDetail);
     remove(this._filmComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
+
+  _onCommentsChange(commentController, newData, oldData) {
+    const isSuccess = this._commentModel.updateComments(oldData.id, newData);
+    if (isSuccess) {
+
+      this._removeComments();
+      this._comments = this._commentModel.getComments();
+      const container = document.querySelector(`.film-details__comments-list`);
+      const newComments = renderComments(container, MODE.OLD, this._onCommentsChange, this._comments);
+      this._showedCommentsControllers = this._showedCommentsControllers.concat(newComments);
+    }
   }
 
 

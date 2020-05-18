@@ -28,8 +28,13 @@ export default class Comment extends AbstractComponent {
   getTemplate() {
     return getComments(this._comment);
   }
+  rerender() {
+    super.rerender();
+  }
   _setClickOnButton(hendler) {
+    this._onDelHendler = hendler;
     this.getElement().querySelector(`.film-details__comment-delete`).addEventListener(`click`, hendler);
+
   }
 }
 
