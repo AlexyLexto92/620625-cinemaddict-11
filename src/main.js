@@ -4,7 +4,7 @@ import Menu from './components/menu.js';
 import FilmList from './components/film-List.js';
 import FooterStatistic from './components/footer-Statistic.js';
 import PageController from './controller/films-Controller.js';
-import {dataFilms, filtersData} from './components/mock.js';
+import {dataFilms} from './components/mock.js';
 import {render, RenderPosition} from './components/utils.js';
 import MovieModel from './models/movie.js';
 import FilterController from './controller/filters-Controller.js';
@@ -18,9 +18,7 @@ const menu = new Menu();
 const Topfilters = menu.getElement().querySelector(`.main-navigation__items`);
 render(siteHeaderElement, new Profile(), RenderPosition.BEFOREEND);
 render(siteMainElement, menu, RenderPosition.AFTERBEGIN);
-/* filtersData.forEach((element) => {
-  render(Topfilters, new Filter(element), RenderPosition.BEFOREEND);
-}); */
+
 const filterController = new FilterController(Topfilters, movieModel);
 filterController.render();
 

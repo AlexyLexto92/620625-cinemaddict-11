@@ -1,4 +1,4 @@
-import { getMoviesByFilter, FilterType } from '../components/utils.js';
+import {getMoviesByFilter, FilterType} from '../components/utils.js';
 export default class Movies {
   constructor() {
     this._movies = [];
@@ -8,7 +8,7 @@ export default class Movies {
   }
 
   getMovies() {
-    debugger
+
     return getMoviesByFilter(this._movies, this._activeFilterType);
   }
   getMoviesAll() {

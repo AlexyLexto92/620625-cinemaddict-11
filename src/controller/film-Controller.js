@@ -2,8 +2,25 @@ import FilmCard from '../components/film-Card.js';
 import FilmCardDetail from '../components/film-details.js';
 import {render, RenderPosition, remove, replaceElement} from '../components/utils.js';
 import SmartAbstracktComponent from '../components/smart-abstract-component.js';
+import CommentController from './comment-Controller.js';
 const activeClassesToOpenPopup = [`film-card__poster`, `film-card__comments`, `film-card__title`];
+export const MODE = {
+  OLD: `old`,
+  NEW: `new`,
+};
+const renderComments = (containerElement, mode, array = []) => {
+  const commentController = new CommentController(containerElement, mode);
+  if (array.length >= 1) {
 
+    return array.map((comment) => {
+
+      commentController.render(comment);
+    });
+  } else {
+    commentController.render();
+  }
+  return commentController;
+};
 const Mode = {
   DEFAULT: `default`,
   EDIT: `edit`,
@@ -19,9 +36,20 @@ export default class FilmController extends SmartAbstracktComponent {
     this._filmDetail = null;
     this._onDataChange = onDataChange;
     this._oldPopupComponent = null;
+    this._showedCommentsControllers = [];
+
   }
   _filmPopupRemove(elem) {
     remove(elem);
+  }
+  _renderComments(film) {
+    const container = document.querySelector(`.film-details__comments-list`);
+    const newComments = renderComments(container, MODE.OLD, film.comments);
+    this.__showedCommentsControllers = this._showedCommentsControllers.concat(newComments);
+  }
+  _renderAddComment() {
+    const container = document.querySelector(`.film-details__comments-wrap`);
+    renderComments(container, MODE.NEW);
   }
 
   render(film) {
@@ -49,6 +77,9 @@ export default class FilmController extends SmartAbstracktComponent {
           this._mode = Mode.DEFAULT;
         } else {
           render(cont, this._filmDetail, RenderPosition.AFTERBEGIN);
+          this._renderComments(film);
+          this._renderAddComment();
+
         }
         document.addEventListener(`keydown`, setOnEscKeyDown);
       }
