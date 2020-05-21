@@ -69,7 +69,13 @@ export default class PageController {
     this._movieModel.setFilterChangeHandler(this._onFilterChange);
     this._showedMoviesControllers = [];
   }
+  hide() {
+    this._container.hide();
+  }
 
+  show() {
+    this._container.show();
+  }
   render() {
     const films = this._movieModel.getMovies();
     this._films = films;
