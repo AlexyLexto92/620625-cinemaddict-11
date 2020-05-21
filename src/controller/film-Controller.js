@@ -2,15 +2,35 @@ import FilmCard from '../components/film-Card.js';
 import FilmCardDetail from '../components/film-details.js';
 import {render, RenderPosition, remove, replaceElement} from '../components/utils.js';
 import SmartAbstracktComponent from '../components/smart-abstract-component.js';
+import CommentController from './comment-Controller.js';
 const activeClassesToOpenPopup = [`film-card__poster`, `film-card__comments`, `film-card__title`];
+export const MODE = {
+  OLD: `old`,
+  NEW: `new`,
+};
+const renderComments = (containerElement, mode, _onCommentsChange, array = []) => {
 
+  if (array.length >= 1) {
+
+    return array.map((comment) => {
+      const commentController = new CommentController(containerElement, mode, _onCommentsChange);
+      commentController.render(comment);
+      return commentController;
+    });
+  } else {
+    const commentController = new CommentController(containerElement, mode, _onCommentsChange);
+    commentController.render();
+    return commentController;
+  }
+
+};
 const Mode = {
   DEFAULT: `default`,
   EDIT: `edit`,
 };
 
 export default class FilmController extends SmartAbstracktComponent {
-  constructor(container, popupContainer, onDataChange, onViewChange) {
+  constructor(container, popupContainer, onDataChange, onViewChange, movieModel, commentModel) {
     super();
     this._onViewChange = onViewChange;
     this._container = container;
@@ -19,9 +39,31 @@ export default class FilmController extends SmartAbstracktComponent {
     this._filmDetail = null;
     this._onDataChange = onDataChange;
     this._oldPopupComponent = null;
+    this._showedCommentsControllers = [];
+    this._movieModel = movieModel;
+    this._commentModel = commentModel;
+    this._onCommentsChange = this._onCommentsChange.bind(this);
   }
   _filmPopupRemove(elem) {
     remove(elem);
+  }
+  _renderComments(film) {
+    this._commentModel.setComment(film);
+    this._createComments();
+  }
+  _createComments() {
+    this._comments = this._commentModel.getComments();
+    const container = document.querySelector(`.film-details__comments-list`);
+    const newComments = renderComments(container, MODE.OLD, this._onCommentsChange, this._comments);
+    this._showedCommentsControllers = this._showedCommentsControllers.concat(newComments);
+  }
+  _removeComments() {
+    this._showedCommentsControllers.forEach((commentController) => commentController.destroy());
+    this._showedCommentsControllers = [];
+  }
+  _renderAddComment() {
+    const container = document.querySelector(`.film-details__comments-wrap`);
+    renderComments(container, MODE.NEW, this._onCommentsChange);
   }
 
   render(film) {
@@ -49,6 +91,9 @@ export default class FilmController extends SmartAbstracktComponent {
           this._mode = Mode.DEFAULT;
         } else {
           render(cont, this._filmDetail, RenderPosition.AFTERBEGIN);
+          this._renderComments(film);
+          this._renderAddComment();
+
         }
         document.addEventListener(`keydown`, setOnEscKeyDown);
       }
@@ -116,6 +161,28 @@ export default class FilmController extends SmartAbstracktComponent {
   setDefaultView() {
     if (this._mode !== Mode.DEFAULT) {
       this._replacePopup();
+    }
+  }
+  destroy() {
+    remove(this._filmDetail);
+    remove(this._filmComponent);
+    document.removeEventListener(`keydown`, this._onEscKeyDown);
+  }
+
+  _onCommentsChange(commentController, newData, oldData) {
+    if (!oldData) {
+      this._commentModel.addComment(newData);
+      this._removeComments();
+      this._createComments();
+    } else {
+
+      const isSuccess = this._commentModel.updateComments(oldData.id, newData);
+      if (isSuccess) {
+        this._removeComments();
+        this._createComments();
+      }
+
+
     }
   }
 
