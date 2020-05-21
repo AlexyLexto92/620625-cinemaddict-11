@@ -47,8 +47,8 @@ const getStatistick = () => {
 
   </section>
 
-  `)
-}
+  `);
+};
 export class Statistic extends AbstractComponent {
   constructor() {
     super();
