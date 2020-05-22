@@ -27,7 +27,6 @@ export default class Movies {
   }
 
   updateMovie(id, movies) {
-    debugger
     const index = this._movies.findIndex((it) => it.id === id);
 
     if (index === -1) {

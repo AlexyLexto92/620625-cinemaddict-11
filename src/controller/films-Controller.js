@@ -1,9 +1,9 @@
 import TopComment from '../components/top-Comment.js';
 import TopRated from '../components/top-Rated.js';
-import Sort, { SortType } from '../components/sort.js';
+import Sort, {SortType} from '../components/sort.js';
 import LoadButton from '../components/button-More.js';
 import NoFilms from '../components/no-films.js';
-import { render, RenderPosition, remove } from '../components/utils.js';
+import {render, RenderPosition, remove} from '../components/utils.js';
 import FilmController from './film-Controller.js';
 
 const FILM = {
@@ -166,15 +166,8 @@ export default class PageController {
     this._showedMoviesCount = this._showedMoviesControllers.length;
   }
   _onDataChange(filmController, oldData, newData) {
-    /*     const isSuccess = this._movieModel.updateMovie(oldData.id, newData);
-        if (isSuccess) {
-          filmController.render(newData);
-        } */
-
-    debugger
     this._api._updateMovie(oldData.id, newData)
       .then((rem) => {
-        debugger
         const isSuccess = this._movieModel.updateMovie(oldData.id, rem);
         if (isSuccess) {
           filmController.render(rem);

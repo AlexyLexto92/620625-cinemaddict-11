@@ -1,9 +1,9 @@
 import SmartAbstracktComponent from './smart-abstract-component.js';
 import moment from 'moment';
 import {getFilmDuration} from '../components/utils.js';
-export const getFilmDetails = ({id, film_info, user_details, comments}) => {
-  let {title, alternative_title: altTitle, total_rating: totalRating, poster, age_rating: ageRating, director, writers, actors, release: {date, release_country: releaseCounry}, runtime, genre, description} = film_info;
-  let {watchlist, already_watched: alreadyWatched, favorite} = user_details;
+export const getFilmDetails = ({id, film_info: filmInfo, user_details: userDetails, comments}) => {
+  let {title, alternative_title: altTitle, total_rating: totalRating, poster, age_rating: ageRating, director, writers, actors, release: {date, release_country: releaseCounry}, runtime, genre, description} = filmInfo;
+  let {watchlist, already_watched: alreadyWatched, favorite} = userDetails;
   return (
     `<section class="film-details">
 <form class="film-details__inner" action="" method="get">
