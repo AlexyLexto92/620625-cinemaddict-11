@@ -9,7 +9,7 @@ import MovieModel from './models/movie.js';
 import CommentModel from './models/comment.js';
 import FilterController from './controller/filters-Controller.js';
 import API from './api.js';
-const AUTHORIZATION = `Basic awdadawd`;
+const AUTHORIZATION = `Basic awdkma1=09dfvlk`;
 const api = new API(AUTHORIZATION);
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
@@ -26,7 +26,7 @@ const filterController = new FilterController(Topfilters, movieModel);
 filterController.render();
 
 const filmList = new FilmList();
-const pageController = new PageController(filmList, footer, movieModel, commentModel);
+const pageController = new PageController(filmList, footer, movieModel, commentModel, api);
 render(siteMainElement, filmList, RenderPosition.BEFOREEND);
 
 
@@ -34,7 +34,6 @@ render(footer, new FooterStatistic(dataFilms.length), RenderPosition.BEFOREEND);
 
 api.getMovies()
   .then((movies) => {
-    debugger
     movieModel.setMovie(movies);
     pageController.render();
   });

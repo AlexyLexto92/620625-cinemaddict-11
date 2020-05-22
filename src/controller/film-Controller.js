@@ -30,7 +30,7 @@ const Mode = {
 };
 
 export default class FilmController extends SmartAbstracktComponent {
-  constructor(container, popupContainer, onDataChange, onViewChange, movieModel, commentModel) {
+  constructor(container, popupContainer, onDataChange, onViewChange, movieModel, commentModel, api) {
     super();
     this._onViewChange = onViewChange;
     this._container = container;
@@ -43,13 +43,17 @@ export default class FilmController extends SmartAbstracktComponent {
     this._movieModel = movieModel;
     this._commentModel = commentModel;
     this._onCommentsChange = this._onCommentsChange.bind(this);
+    this._api = api;
   }
   _filmPopupRemove(elem) {
     remove(elem);
   }
-  _renderComments(film) {
-    this._commentModel.setComment(film);
-    this._createComments();
+  _renderComments(id) {
+    this._api.getComments(id).
+      then((comments) => {
+        this._commentModel.setComment(comments);
+        this._createComments();
+      });
   }
   _createComments() {
     this._comments = this._commentModel.getComments();
@@ -91,7 +95,7 @@ export default class FilmController extends SmartAbstracktComponent {
           this._mode = Mode.DEFAULT;
         } else {
           render(cont, this._filmDetail, RenderPosition.AFTERBEGIN);
-          this._renderComments(film);
+          this._renderComments(film.id);
           this._renderAddComment();
 
         }

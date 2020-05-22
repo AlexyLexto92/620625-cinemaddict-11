@@ -1,10 +1,11 @@
 export default class Comment {
-  constructor() {
+  constructor(api) {
     this._comments = [];
+    this._api = api;
   }
 
-  setComment(film) {
-    this._comments = film.comments;
+  setComment(comments) {
+    this._comments = comments;
     return this._comments;
   }
   getComments() {

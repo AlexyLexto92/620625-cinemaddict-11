@@ -22,9 +22,9 @@ const COMMENT = {
 };
 let startFilmCount = FILM.START;
 
-const renderFilm = (containerElement, films, popupContainer, onDataChange, onViewChange, movieModel, commentModel) => {
+const renderFilm = (containerElement, films, popupContainer, onDataChange, onViewChange, movieModel, commentModel, api) => {
   return films.map((film) => {
-    const filmController = new FilmController(containerElement, popupContainer, onDataChange, onViewChange, movieModel, commentModel);
+    const filmController = new FilmController(containerElement, popupContainer, onDataChange, onViewChange, movieModel, commentModel, api);
     filmController.render(film);
     return filmController;
   });
@@ -53,7 +53,7 @@ const getSortedFilms = (films, sortType, from, to) => {
 
 
 export default class PageController {
-  constructor(container, popupContainer, movieModel, commentModel) {
+  constructor(container, popupContainer, movieModel, commentModel, api) {
     this._popupContainer = popupContainer;
     this._container = container;
     this._ratedTopFillms = new TopRated();
@@ -68,6 +68,7 @@ export default class PageController {
     this._onFilterChange = this._onFilterChange.bind(this);
     this._movieModel.setFilterChangeHandler(this._onFilterChange);
     this._showedMoviesControllers = [];
+    this._api = api;
   }
 
   render() {
@@ -95,7 +96,7 @@ export default class PageController {
       let end = 0;
       let slicedFilms;
       let renderCategoryFilms = (array) => {
-        renderFilm(TopCategoryFilmsContainer, array, this._popupContainer, this._onDataChange, this._onViewChange, this._movieModel, this._commentModel);
+        renderFilm(TopCategoryFilmsContainer, array, this._popupContainer, this._onDataChange, this._onViewChange, this._movieModel, this._commentModel, this._api);
       };
       if (Topcategory === `rating`) {
         let ratingArr = data.slice().sort((a, b) => {
@@ -160,7 +161,7 @@ export default class PageController {
   }
   _renderMovies(films) {
     const cont = document.querySelector(`.films-list__container--top`);
-    let newMovies = renderFilm(cont, films, this._popupContainer, this._onDataChange, this._onViewChange, this._movieModel, this._commentModel);
+    let newMovies = renderFilm(cont, films, this._popupContainer, this._onDataChange, this._onViewChange, this._movieModel, this._commentModel, this._api);
     this._showedMoviesControllers = this._showedMoviesControllers.concat(newMovies);
     this._showedMoviesCount = this._showedMoviesControllers.length;
   }
