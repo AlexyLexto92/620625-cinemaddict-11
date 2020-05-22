@@ -9,7 +9,8 @@ import MovieModel from './models/movie.js';
 import CommentModel from './models/comment.js';
 import FilterController from './controller/filters-Controller.js';
 import API from './api.js';
-const api = new API();
+const AUTHORIZATION = `Basic awdadawd`;
+const api = new API(AUTHORIZATION);
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 let footer = document.querySelector(`.footer`);
@@ -31,8 +32,9 @@ render(siteMainElement, filmList, RenderPosition.BEFOREEND);
 
 render(footer, new FooterStatistic(dataFilms.length), RenderPosition.BEFOREEND);
 
-api.getTasks()
+api.getMovies()
   .then((movies) => {
+    debugger
     movieModel.setMovie(movies);
     pageController.render();
   });
