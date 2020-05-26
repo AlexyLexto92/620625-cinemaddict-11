@@ -44,6 +44,7 @@ export default class FilmController extends SmartAbstracktComponent {
     this._commentModel = commentModel;
     this._onCommentsChange = this._onCommentsChange.bind(this);
     this._api = api;
+    this._comments = [];
   }
   _filmPopupRemove(elem) {
     remove(elem);
@@ -72,8 +73,9 @@ export default class FilmController extends SmartAbstracktComponent {
 
   render(film) {
     const oldFilmComponent = this._filmComponent;
-    this._filmComponent = new FilmCard(film);
-    this._filmDetail = new FilmCardDetail(film);
+    this._commentsLength = this._commentModel.getCommentsLength();
+    this._filmComponent = new FilmCard(film, this._commentsLength);
+    this._filmDetail = new FilmCardDetail(film, this._commentsLength);
     const cont = this._popupContainer;
 
     const setOnEscKeyDown = (event) => {
@@ -111,6 +113,7 @@ export default class FilmController extends SmartAbstracktComponent {
       }
     });
     this._filmComponent.setOnClickButtonWatchlist((evt) => {
+
       evt.preventDefault();
       oldData = Object.assign({}, film, {});
       oldData.user_details.watchlist = !oldData.user_details.watchlist;

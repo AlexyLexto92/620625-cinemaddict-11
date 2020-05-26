@@ -2,17 +2,25 @@ export default class Comment {
   constructor(api) {
     this._comments = [];
     this._api = api;
+    this._commentsLength = 0;
   }
 
   setComment(comments) {
     this._comments = comments;
+    this.getCommentsLength();
     return this._comments;
   }
   getComments() {
     return this._comments;
   }
-  updateComments(id, comment) {
 
+  getCommentsLength() {
+    this._commentsLength = this._comments.length;
+    return this._commentsLength;
+
+  }
+
+  updateComments(id, comment) {
 
     const index = this._comments.findIndex((it) => it.id === id);
 
@@ -28,6 +36,7 @@ export default class Comment {
   }
   addComment(comment) {
     this._comments.push(comment);
+    this.getCommentsLength();
   }
 }
 

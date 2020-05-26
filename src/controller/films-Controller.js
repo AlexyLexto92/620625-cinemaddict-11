@@ -1,11 +1,11 @@
 import TopComment from '../components/top-Comment.js';
 import TopRated from '../components/top-Rated.js';
-import Sort, {SortType} from '../components/sort.js';
+import Sort from '../components/sort.js';
 import LoadButton from '../components/button-More.js';
 import NoFilms from '../components/no-films.js';
 import {render, RenderPosition, remove} from '../components/utils.js';
 import FilmController from './film-Controller.js';
-
+import {getSortedFilms} from '../components/utils.js';
 const FILM = {
   START: 0,
   COUNT: 5,
@@ -29,28 +29,6 @@ const renderFilm = (containerElement, films, popupContainer, onDataChange, onVie
     return filmController;
   });
 };
-
-const getSortedFilms = (films, sortType, from, to) => {
-  let sortedArray = [];
-  const showFilms = films.slice();
-  switch (sortType) {
-    case SortType.DATE_UP:
-      sortedArray = showFilms.slice().sort((a, b) => {
-        a.film_info.release.date = new Date(a.film_info.release.date).getTime();
-        b.film_info.release.date = new Date(b.film_info.release.date).getTime();
-        return b.film_info.release.date - a.film_info.release.date;
-      });
-      break;
-    case SortType.RATING_UP:
-      sortedArray = showFilms.slice().sort((a, b) => b.film_info.total_rating - a.film_info.total_rating);
-      break;
-    case SortType.DEFAULT:
-      sortedArray = showFilms.slice();
-      break;
-  }
-  return sortedArray.slice(from, to);
-};
-
 
 export default class PageController {
   constructor(container, popupContainer, movieModel, commentModel, api) {
@@ -167,11 +145,10 @@ export default class PageController {
   }
   _onDataChange(filmController, oldData, newData) {
     this._api._updateMovie(oldData.id, newData)
-      .then((rem) => {
-        const isSuccess = this._movieModel.updateMovie(oldData.id, rem);
+      .then((movieModel) => {
+        const isSuccess = this._movieModel.updateMovie(oldData.id, movieModel);
         if (isSuccess) {
-          filmController.render(rem);
-          this._updateMovies(this._showedMoviesCount);
+          filmController.render(movieModel);
         }
       });
   }

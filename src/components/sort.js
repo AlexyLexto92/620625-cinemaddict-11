@@ -1,9 +1,5 @@
 import AbstractComponent from './abstract-component.js';
-export const SortType = {
-  RATING_UP: `rating-up`,
-  DATE_UP: `date-up`,
-  DEFAULT: `default`,
-};
+import {SortType} from './utils.js';
 export const createSiteSort = () => {
   return (
     `<ul class="sort">

@@ -3,7 +3,6 @@ import Menu from './components/menu.js';
 import FilmList from './components/film-List.js';
 import FooterStatistic from './components/footer-Statistic.js';
 import PageController from './controller/films-Controller.js';
-import {dataFilms} from './components/mock.js';
 import {render, RenderPosition} from './components/utils.js';
 import MovieModel from './models/movie.js';
 import CommentModel from './models/comment.js';
@@ -30,10 +29,9 @@ const pageController = new PageController(filmList, footer, movieModel, commentM
 render(siteMainElement, filmList, RenderPosition.BEFOREEND);
 
 
-render(footer, new FooterStatistic(dataFilms.length), RenderPosition.BEFOREEND);
-
 api.getMovies()
   .then((movies) => {
     movieModel.setMovie(movies);
     pageController.render();
+    render(footer, new FooterStatistic(movieModel.getMoviesthLength()), RenderPosition.BEFOREEND);
   });

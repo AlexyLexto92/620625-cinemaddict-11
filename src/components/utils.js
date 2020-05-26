@@ -1,5 +1,10 @@
 import moment from 'moment';
 import momentDurationFormatSetup from "moment-duration-format";
+export const SortType = {
+  RATING_UP: `rating-up`,
+  DATE_UP: `date-up`,
+  DEFAULT: `default`,
+};
 momentDurationFormatSetup(moment);
 export const FilterType = {
   ALL: `All`,
@@ -93,4 +98,24 @@ export const getMoviesByFilter = (movies, filterType) => {
       return getFavoriteMovies(movies);
   }
   return movies;
+};
+export const getSortedFilms = (films, sortType, from, to) => {
+  let sortedArray = [];
+  const showFilms = films.slice();
+  switch (sortType) {
+    case SortType.DATE_UP:
+      sortedArray = showFilms.slice().sort((a, b) => {
+        let c = new Date(a.film_info.release.date).getTime();
+        let d = new Date(b.film_info.release.date).getTime();
+        return d - c;
+      });
+      break;
+    case SortType.RATING_UP:
+      sortedArray = showFilms.slice().sort((a, b) => b.film_info.total_rating - a.film_info.total_rating);
+      break;
+    case SortType.DEFAULT:
+      sortedArray = showFilms.slice();
+      break;
+  }
+  return sortedArray.slice(from, to);
 };

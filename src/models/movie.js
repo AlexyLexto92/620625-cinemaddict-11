@@ -6,6 +6,7 @@ export default class Movies {
     this._dataChangeHandlers = [];
     this._filterChangeHandlers = [];
     this._comments = [];
+    this._moviesthLength = 0;
   }
 
   getMovies() {
@@ -16,9 +17,15 @@ export default class Movies {
     return this._movies;
   }
 
+  getMoviesthLength() {
+    this._moviesthLength = this._movies.length;
+    return this._moviesthLength;
+  }
+
   setMovie(movies) {
     this._movies = Array.from(movies);
     this._callHandlers(this._dataChangeHandlers);
+    this.getMoviesthLength();
   }
 
   setFilter(filterType) {
@@ -51,5 +58,3 @@ export default class Movies {
     handlers.forEach((handler) => handler());
   }
 }
-
-
